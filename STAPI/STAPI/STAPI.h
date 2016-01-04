@@ -2,7 +2,7 @@
 //  STAPI.h
 //  STAPI
 //
-//  Created by SenseTime on 15/12/22.
+//  Created by SenseTime on 16/01/04.
 //  Copyright © 2016年 SenseTime. All rights reserved.
 //
 //  官网： http://www.sensetime.com/cn
@@ -62,7 +62,7 @@
 
 /**
  *  获取检测过的人脸的相关信息
- *  
+ *
  *  @param faceid    必须，人脸 ID
  *  @param image     非必须 是否返回人脸所属图片信息，为 YES 时返回。默认为 NO，不返回
  *
@@ -139,6 +139,7 @@
 *   注意：对于其他可选参数（如auto_rotate，landmarks106和 attribute），如果没有需求，请不要开启，这样会减少系统计算时间
  *  @param landmarks106 非必须，值为 1 时，计算 106 个关键点。默认值为 0，不计算
  *  @param attributes   非必须，值为 1 时，提取人脸属性。默认值为 0，不提取
+ *  @param emotions     非必须，值为 1 时，检测人脸表情。默认值为 0，不检测
  *  @param auto_rotate  非必须，值为1时，对图片进行自动旋转。默认值为0时，不旋转
  *  @param user_data    非必须，用户自定义信息
  *
@@ -147,10 +148,11 @@
 -(STImage *)face_detection_image:(UIImage *)image ;
 
 -(STImage *)face_detection_image:(UIImage *)image
-                           landmarks106:(BOOL)landmarks106
-                             attributes:(BOOL)attributes
-                            auto_rotate:(BOOL)auto_rotate
-                              user_data:(NSString *)user_data;
+                    landmarks106:(BOOL)landmarks106
+                      attributes:(BOOL)attributes
+                        emotions:(BOOL)emotions
+                     auto_rotate:(BOOL)auto_rotate
+                       user_data:(NSString *)user_data;
 
 /**
  *  提供图片，进行人脸检测以及人脸分析
@@ -162,6 +164,7 @@
  *   注意：对于其他可选参数（如auto_rotate，landmarks106和 attribute），如果没有需求，请不要开启，这样会减少系统计算时间
  *  @param landmarks106 非必须，值为 1 时，计算 106 个关键点。默认值为 0，不计算
  *  @param attributes   非必须，值为 1 时，提取人脸属性。默认值为 0，不提取
+ *  @param emotions     非必须，值为 1 时，检测人脸表情。默认值为 0，不检测
  *  @param auto_rotate  非必须，值为1时，对图片进行自动旋转。默认值为0时，不旋转
  *  @param user_data    非必须，用户自定义信息
  *
@@ -170,10 +173,11 @@
 - (STImage *)face_detection_url:(NSString *) strImageUrl    ;
 
 - (STImage *)face_detection_url:(NSString *) strImageUrl
-                               landmarks106:(BOOL)landmarks106
-                                 attributes:(BOOL)attributes
-                                auto_rotate:(BOOL)auto_rotate
-                                  user_data:(NSString *)user_data;
+                   landmarks106:(BOOL)landmarks106
+                     attributes:(BOOL)attributes
+                       emotions:(BOOL)emotions
+                    auto_rotate:(BOOL)auto_rotate
+                      user_data:(NSString *)user_data;
 
 
 /**
@@ -246,6 +250,18 @@
 - (BOOL)face_training_faceids:(NSMutableArray *)faceids personids:(NSMutableArray *)personids facesetids:(NSMutableArray *)facesetids groupids:(NSMutableArray *)groupids;
 
 
+#warning 待处理
+/**
+ *  一堆人脸根据其之间的相似度进行分类，同一个人的人脸为一类( Beta 阶段),请不要在正式产品中使用
+ *
+ *  请求参数 face_ids、faceset_id 两者中必须选择其中的一个。如果同时提供， 系统只根据 faceset_id 进行分类。
+ *  注意：一次请求包含的人脸数量不应超过 1200 个
+ *  @return 返回分类结果
+ - (instancetype)face_grouping_faceids:(NSArray *)faceids facesetid:(NSString *)facesetid;
+ 
+ */
+
+
 // =======================人的管理===============================
 
 /**
@@ -257,7 +273,7 @@
  *
  *  @return STPerson对象
  */
-- (STPerson *)person_create_name:(NSString *)name faceids:(NSMutableArray *)faceids userdata:(NSString *)userdata;
+- (STPerson *)person_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata;
 
 /**
  *  是删除一个人,删除人后，该人所拥有的人脸 ID 若未过期，则人脸 ID 不会失效。
@@ -298,7 +314,7 @@
  *  @param person   STPerson对象
  *  @param name     人名
  *  @param userdata 用户自定义数据
-*   请求参数 name、user_data 两者中至少存在一个。
+ *   请求参数 name、user_data 两者中至少存在一个。
  *
  *  @return 成功返回YES,失败返回NO
  */
@@ -315,7 +331,7 @@
  *
  *  @return STGroup 对象
  */
-- (STGroup *)group_create_groupname:(NSString *)name personids:(NSMutableArray *)personids userdata:(NSString *)userdata;
+- (STGroup *)group_create_groupname:(NSString *)name personids:(NSString *)personids userdata:(NSString *)userdata;
 
 /**
  *  删除一个组
@@ -371,7 +387,7 @@
  *
  *  @return STFaceSet对象
  */
-- (STFaceSet *)faceset_create_name:(NSString *)name faceids:(NSMutableArray *)faceids userdata:(NSString *)userdata;
+- (STFaceSet *)faceset_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata;
 
 /**
  *  是删除一个人脸集合
@@ -449,7 +465,7 @@
  *  OK          - 正常
  *
  *  UNAUTHORIZED - 账号或密钥错误
- *  
+ *
  *  KEY_EXPIRED  - 账号过期，具体情况见 reason 字段内容
  *
  *  RATE_LIMIT_EXCEEDED  - 调用频率超出限额
