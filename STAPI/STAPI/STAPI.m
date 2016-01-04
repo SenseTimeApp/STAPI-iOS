@@ -2,7 +2,7 @@
 //  STAPI.m
 //  STAPI
 //
-//  Created by SenseTime on 15/12/22.
+//  Created by SenseTime on 16/01/04.
 //  Copyright © 2016年 SenseTime. All rights reserved.
 //
 
@@ -110,7 +110,7 @@
 }
 
 - (NSDictionary*)info_personid:(NSString *)personid{
-
+    
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,INFO_PERSON];
     
     NSDictionary *parameters = @{ API_ID:self.apiid,API_SECRET:self.apisecret,@"person_id":personid};
@@ -150,10 +150,11 @@
 }
 
 -(STImage *)face_detection_image:(UIImage *)image
-                           landmarks106:(BOOL)landmarks106
-                             attributes:(BOOL)attributes
-                            auto_rotate:(BOOL)auto_rotate
-                              user_data:(NSString *)user_data{
+                    landmarks106:(BOOL)landmarks106
+                      attributes:(BOOL)attributes
+                        emotions:(BOOL)emotions
+                     auto_rotate:(BOOL)auto_rotate
+                       user_data:(NSString *)user_data{
     if ( image == nil ) {
         return nil ;
     }
@@ -166,9 +167,10 @@
     NSDictionary *parameters = @{
                                  @"landmarks106":[NSNumber numberWithBool:landmarks106],
                                  @"attributes": [NSNumber numberWithBool:attributes],
+                                 @"emotions": [NSNumber numberWithBool:emotions],
                                  @"auto_rotate": [NSNumber numberWithBool:auto_rotate],
                                  @"user_data": user_data,
-                           };
+                                 };
     
     NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters andImage:image];
     if ([self.status isEqualToString:STATUS_OK]&&dict) {
@@ -194,18 +196,20 @@
 }
 
 - (STImage *)face_detection_url:(NSString *)strImageUrl
-                               landmarks106:(BOOL)landmarks106
-                                 attributes:(BOOL)attributes
-                                auto_rotate:(BOOL)auto_rotate
-                                  user_data:(NSString *)user_data{
+                   landmarks106:(BOOL)landmarks106
+                     attributes:(BOOL)attributes
+                       emotions:(BOOL)emotions
+                    auto_rotate:(BOOL)auto_rotate
+                      user_data:(NSString *)user_data{
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_DETECTION];
     NSDictionary *parameters = @{
                                  @"landmarks106":[NSNumber numberWithBool:landmarks106],
                                  @"attributes": [NSNumber numberWithBool:attributes],
+                                 @"emotions": [NSNumber numberWithBool:emotions],
                                  @"auto_rotate": [NSNumber numberWithBool:auto_rotate],
                                  @"user_data": user_data,
                                  @"url": strImageUrl ,
-                               };
+                                 };
     
     NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
     
@@ -224,7 +228,7 @@
                                  };
     
     NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
-
+    
     if ([self.status isEqualToString:STATUS_OK]&&dict) {
         return [[dict objectForKey:@"confidence"] floatValue];
     }
@@ -306,7 +310,10 @@
 }
 
 #pragma mark 人的管理
-- (STPerson *)person_create_name:(NSString *)name faceids:(NSMutableArray *)faceids userdata:(NSString *)userdata{
+- (STPerson *)person_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata{
+    if (userdata == nil) {
+        userdata = @"_";
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,PERSON_CREATE];
     NSDictionary *parameters = @{
                                  @"name":name,
@@ -321,8 +328,8 @@
         STPerson *stPerson = [[STPerson alloc]initWithDict:dict];
         if ( self.bDebug ){
             NSLog(@"STPerson = %@", stPerson);
-            return stPerson;
         }
+        return stPerson;
     }
     return nil;
 }
@@ -380,8 +387,14 @@
 
 #pragma mark 组的管理
 
-- (STGroup *)group_create_groupname:(NSString *)name personids:(NSMutableArray *)personids userdata:(NSString *)userdata
+- (STGroup *)group_create_groupname:(NSString *)name personids:(NSString *)personids userdata:(NSString *)userdata
 {
+    if (userdata == nil) {
+        userdata = @"_";
+    }
+    if (personids == nil) {
+        return nil;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,GROUP_CREATE];
     NSDictionary *parameters = @{
                                  @"name":name,
@@ -393,11 +406,12 @@
     
     if ([self.status isEqualToString:STATUS_OK]&&dict) {
         
-        STGroup *stPerson = [[STGroup alloc]initWithDict:dict];
+        STGroup *stGroup = [[STGroup alloc]initWithDict:dict];
         if ( self.bDebug ){
-            NSLog(@"STPerson = %@", stPerson);
-            return stPerson;
+            NSLog(@"STGroup = %@", stGroup);
         }
+        return stGroup;
+        
     }
     return nil;
 }
@@ -427,9 +441,9 @@
 }
 
 - (BOOL)group_remove_person_groupid:(NSString *)groupid personids:(NSMutableArray *)personids{
-   
+    
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,GROUP_REMOVE_PERSON];
-
+    
     NSDictionary *parameters = @{@"group_id":groupid,@"person_id":personids};
     
     NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
@@ -454,8 +468,11 @@
 
 #pragma makr 人脸集合的管理
 
-- (STFaceSet *)faceset_create_name:(NSString *)name faceids:(NSMutableArray *)faceids userdata:(NSString *)userdata
+- (STFaceSet *)faceset_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata
 {
+    if (userdata == nil) {
+        userdata = @"_";
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACESET_CREATE];
     NSDictionary *parameters = @{
                                  @"name":name,
@@ -467,11 +484,11 @@
     
     if ([self.status isEqualToString:STATUS_OK]&&dict) {
         
-        STFaceSet *stPerson = [[STFaceSet alloc]initWithDict:dict];
+        STFaceSet *stFaceSet = [[STFaceSet alloc]initWithDict:dict];
         if ( self.bDebug ){
-            NSLog(@"stFaceSet = %@", stPerson);
-            return stPerson;
+            NSLog(@"STFaceSet = %@", stFaceSet);
         }
+        return stFaceSet;
     }
     return nil;
 }
@@ -488,7 +505,7 @@
     return NO;
 }
 
-- (BOOL)faceset_add_face_facesetid:(NSString *)facesetid faceids:(NSMutableArray *)faceids{
+- (BOOL)faceset_add_face_facesetid:(NSString *)facesetid faceid:(NSMutableArray *)faceids{
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACESET_ADD_FACE];
     
     NSDictionary *parameters = @{@"faceset_id":facesetid,@"face_id":faceids};
@@ -539,7 +556,7 @@
     // ------GET请求的URL地址在参数前，需要加上?，表示参数列表开始
     
     [httpBodyString appendString:@"?"];
-
+    
     // ------循环将参数拼接到URL后面
     for (NSString *key in parameterDict) {
         
@@ -699,7 +716,7 @@
     if ( self.bDebug )
         NSLog(@"[STAPI]response: \n%@", self.dictionary);
     return self.dictionary ;
-
+    
 }
 
 -(NSString *)generateBoundaryString {

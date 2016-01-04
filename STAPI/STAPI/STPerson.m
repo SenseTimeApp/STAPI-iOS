@@ -2,7 +2,7 @@
 //  STAPIPerson.m
 //  STAPI
 //
-//  Created by SenseTime on 15/12/22.
+//  Created by SenseTime on 16/01/04.
 //  Copyright © 2016年 SenseTime. All rights reserved.
 //
 
@@ -29,7 +29,7 @@
     
     if (self) {
         
-        self.strPersonID = [dict objectForKey:@"542fe8c0cae841c99dddaefb14faf32b"];
+        self.strPersonID = [dict objectForKey:@"person_id"];
         self.iFaceCount = [[dict objectForKey:@"face_count"]integerValue];
     }
     return self;
