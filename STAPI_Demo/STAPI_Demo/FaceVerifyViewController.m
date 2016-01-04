@@ -11,6 +11,7 @@
 #import "STAPI.h"
 #import "STImage.h"
 
+//#import "MyAPIKey.h"       
 #error define my API key as following :
 #define MyApiID 		@"***********************"
 #define MyApiSecret 	@"***********************"

@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "FaceDetectionViewController.h"
 #import "FaceVerifyViewController.h"
+#import "FaceSearchViewController.h"
 
 @interface ViewController ()
 
@@ -60,6 +61,13 @@
             FaceVerifyViewController *faceDetectionVC = [[[NSBundle mainBundle]loadNibNamed:@"FaceVerifyViewController" owner:nil options:nil]firstObject];
             [self.navigationController pushViewController:faceDetectionVC animated:YES];
         }
+        case 2:
+        {
+            FaceSearchViewController *vc = [[FaceSearchViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }break;
+            
+
         default:
             break;
     }

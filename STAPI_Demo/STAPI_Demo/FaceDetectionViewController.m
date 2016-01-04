@@ -12,6 +12,7 @@
 #import "STCommon.h"
 #import "ImageFace.h"
 
+//#import "MyAPIKey.h"
 #error define my API key as following :
 #define MyApiID 		@"***********************"
 #define MyApiSecret 	@"***********************"
@@ -90,6 +91,10 @@
               mySTApi.httpStatusCode,
               [mySTApi.error description]);
         
+        NSString *strMessage = [NSString stringWithFormat:@"%@\n%@", mySTApi.status, mySTApi.dictionary] ;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:strMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
+        [alert show] ;
+
         [self.indicator stopAnimating];
         return;
         
@@ -107,7 +112,12 @@
         }
         else
         {//106
-            stImage = [mySTApi face_detection_image:imageFace landmarks106:YES attributes:NO auto_rotate:YES user_data:nil] ;
+            stImage = [mySTApi face_detection_image:imageFace
+                                       landmarks106:YES
+                                         attributes:NO
+                                           emotions:NO
+                                        auto_rotate:YES
+                                          user_data:nil] ;
         }
         
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -117,6 +127,12 @@
                       mySTApi.status,
                       mySTApi.httpStatusCode,
                       [mySTApi.error description]);
+                
+                
+                NSString *strMessage = [NSString stringWithFormat:@"%@\n%@", mySTApi.status, mySTApi.dictionary] ;
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:strMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
+                [alert show] ;
+                
             }
             else
             {
@@ -184,6 +200,11 @@
                         self.faceView.frame = CGRectMake(0, 0, self.faceView.frame.size.width, self.faceView.frame.size.height);
                         UIGraphicsEndImageContext();
                     }
+                }
+                else {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"没有检测到脸！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
+                    [alert show] ;
+                    
                 }
             }
             

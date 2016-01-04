@@ -31,6 +31,9 @@
 		F7B7D4391C3A851C00528763 /* STGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B7D4301C3A851C00528763 /* STGroup.m */; };
 		F7B7D43A1C3A851C00528763 /* STImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B7D4321C3A851C00528763 /* STImage.m */; };
 		F7B7D43B1C3A851C00528763 /* STPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F7B7D4341C3A851C00528763 /* STPerson.m */; };
+		FEEBD3111C3AC8EF006498D0 /* face_liu.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FEEBD30F1C3AC8EF006498D0 /* face_liu.jpg */; };
+		FEEBD3121C3AC8EF006498D0 /* face_set.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FEEBD3101C3AC8EF006498D0 /* face_set.jpg */; };
+		FEEBD3151C3AC908006498D0 /* FaceSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FEEBD3141C3AC908006498D0 /* FaceSearchViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +97,10 @@
 		FE616D4C1C325EDB007E8250 /* STAPI_Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STAPI_Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE616D651C325EDB007E8250 /* STAPI_Demo.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STAPI_Demo.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE616D701C325EDB007E8250 /* STAPI_Demo.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STAPI_Demo.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEEBD30F1C3AC8EF006498D0 /* face_liu.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = face_liu.jpg; sourceTree = "<group>"; };
+		FEEBD3101C3AC8EF006498D0 /* face_set.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = face_set.jpg; sourceTree = "<group>"; };
+		FEEBD3131C3AC908006498D0 /* FaceSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FaceSearchViewController.h; sourceTree = "<group>"; };
+		FEEBD3141C3AC908006498D0 /* FaceSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FaceSearchViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,11 +138,15 @@
 				F76A172E1C3A8BE50028C958 /* Class */,
 				F76A17331C3A8BE50028C958 /* Default-568h@2x.png */,
 				F76A17341C3A8BE50028C958 /* face.jpg */,
+				FEEBD30F1C3AC8EF006498D0 /* face_liu.jpg */,
+				FEEBD3101C3AC8EF006498D0 /* face_set.jpg */,
 				F76A17351C3A8BE50028C958 /* FaceDetectionViewController.h */,
 				F76A17361C3A8BE50028C958 /* FaceDetectionViewController.m */,
 				F76A17381C3A8BE50028C958 /* FaceVerifyViewController.h */,
 				F76A17391C3A8BE50028C958 /* FaceVerifyViewController.m */,
 				F76A173A1C3A8BE50028C958 /* FaceVerifyViewController.xib */,
+				FEEBD3131C3AC908006498D0 /* FaceSearchViewController.h */,
+				FEEBD3141C3AC908006498D0 /* FaceSearchViewController.m */,
 				F76A173B1C3A8BE50028C958 /* Info.plist */,
 				F76A173C1C3A8BE50028C958 /* main.m */,
 				F76A173D1C3A8BE50028C958 /* ViewController.h */,
@@ -323,7 +334,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F76A17431C3A8BE50028C958 /* Assets.xcassets in Resources */,
+				FEEBD3111C3AC8EF006498D0 /* face_liu.jpg in Resources */,
 				F76A17521C3A8BE50028C958 /* zjl2.png in Resources */,
+				FEEBD3121C3AC8EF006498D0 /* face_set.jpg in Resources */,
 				F76A17441C3A8BE50028C958 /* LaunchScreen.storyboard in Resources */,
 				F76A17511C3A8BE50028C958 /* zjl1.png in Resources */,
 				F76A17501C3A8BE50028C958 /* ViewController.xib in Resources */,
@@ -357,6 +370,7 @@
 				F76A174F1C3A8BE50028C958 /* ViewController.m in Sources */,
 				F76A174E1C3A8BE50028C958 /* main.m in Sources */,
 				F7B7D4391C3A851C00528763 /* STGroup.m in Sources */,
+				FEEBD3151C3AC908006498D0 /* FaceSearchViewController.m in Sources */,
 				F76A17491C3A8BE50028C958 /* FaceDetectionViewController.m in Sources */,
 				F76A17451C3A8BE50028C958 /* FaceDot.m in Sources */,
 				F7B7D4361C3A851C00528763 /* STCommon.m in Sources */,
