@@ -92,14 +92,6 @@
 - (NSDictionary *)info_list_facesets;
 
 /**
- *
- *
- *  @param person STPerson对象
- *
- *  @return 人的信息及其含有的人脸 ID
- */
-
-/**
  *  获取人的信息及其含有的人脸 ID
  *
  *  @param personid STPerson对象人的 ID
