@@ -94,7 +94,6 @@
     stImage = [self.stApi face_detection_image: imageFace
                                   landmarks106: YES
                                     attributes: YES
-                                      emotions: YES
                                    auto_rotate: NO
                                      user_data: @"MyFaceDetection" ];
     
@@ -123,14 +122,6 @@
     XCTAssert       ( stImage.arrFaces[0][@"attributes"][@"sunglass"] >=0   ) ;
     XCTAssert       ( stImage.arrFaces[0][@"attributes"][@"smile"] >=0      ) ;
     
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"]                    ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"angry"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"calm"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"disgust"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"happy"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"sad"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"surprised"] >=0 ) ;
-    
 }
 
 - (void)test2_face_detection_url {
@@ -156,7 +147,6 @@
     stImage = [self.stApi face_detection_url: strUrl
                                 landmarks106: YES
                                   attributes: YES
-                                    emotions: YES
                                  auto_rotate: NO
                                    user_data: @"MyFaceDetection" ];
     
@@ -184,14 +174,6 @@
     XCTAssert       ( stImage.arrFaces[0][@"attributes"][@"attractive"] >=0 ) ;
     XCTAssert       ( stImage.arrFaces[0][@"attributes"][@"sunglass"] >=0   ) ;
     XCTAssert       ( stImage.arrFaces[0][@"attributes"][@"smile"] >=0      ) ;
-    
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"]                    ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"angry"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"calm"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"disgust"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"happy"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"sad"] >=0 ) ;
-    XCTAssert       ( stImage.arrFaces[0][@"emotions"][@"surprised"] >=0 ) ;
     
 }
 

@@ -152,7 +152,6 @@
 -(STImage *)face_detection_image:(UIImage *)image
                     landmarks106:(BOOL)landmarks106
                       attributes:(BOOL)attributes
-                        emotions:(BOOL)emotions
                      auto_rotate:(BOOL)auto_rotate
                        user_data:(NSString *)user_data{
     if ( image == nil ) {
@@ -167,7 +166,6 @@
     NSDictionary *parameters = @{
                                  @"landmarks106":[NSNumber numberWithBool:landmarks106],
                                  @"attributes": [NSNumber numberWithBool:attributes],
-                                 @"emotions": [NSNumber numberWithBool:emotions],
                                  @"auto_rotate": [NSNumber numberWithBool:auto_rotate],
                                  @"user_data": user_data,
                                  };
@@ -198,14 +196,12 @@
 - (STImage *)face_detection_url:(NSString *)strImageUrl
                    landmarks106:(BOOL)landmarks106
                      attributes:(BOOL)attributes
-                       emotions:(BOOL)emotions
                     auto_rotate:(BOOL)auto_rotate
                       user_data:(NSString *)user_data{
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_DETECTION];
     NSDictionary *parameters = @{
                                  @"landmarks106":[NSNumber numberWithBool:landmarks106],
                                  @"attributes": [NSNumber numberWithBool:attributes],
-                                 @"emotions": [NSNumber numberWithBool:emotions],
                                  @"auto_rotate": [NSNumber numberWithBool:auto_rotate],
                                  @"user_data": user_data,
                                  @"url": strImageUrl ,
@@ -505,7 +501,7 @@
     return NO;
 }
 
-- (BOOL)faceset_add_face_facesetid:(NSString *)facesetid faceid:(NSMutableArray *)faceids{
+- (BOOL)faceset_add_face_facesetid:(NSString *)facesetid faceids:(NSMutableArray *)faceids{
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACESET_ADD_FACE];
     
     NSDictionary *parameters = @{@"faceset_id":facesetid,@"face_id":faceids};

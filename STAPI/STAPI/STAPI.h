@@ -139,7 +139,6 @@
 *   注意：对于其他可选参数（如auto_rotate，landmarks106和 attribute），如果没有需求，请不要开启，这样会减少系统计算时间
  *  @param landmarks106 非必须，值为 1 时，计算 106 个关键点。默认值为 0，不计算
  *  @param attributes   非必须，值为 1 时，提取人脸属性。默认值为 0，不提取
- *  @param emotions     非必须，值为 1 时，检测人脸表情。默认值为 0，不检测
  *  @param auto_rotate  非必须，值为1时，对图片进行自动旋转。默认值为0时，不旋转
  *  @param user_data    非必须，用户自定义信息
  *
@@ -150,7 +149,6 @@
 -(STImage *)face_detection_image:(UIImage *)image
                     landmarks106:(BOOL)landmarks106
                       attributes:(BOOL)attributes
-                        emotions:(BOOL)emotions
                      auto_rotate:(BOOL)auto_rotate
                        user_data:(NSString *)user_data;
 
@@ -164,7 +162,6 @@
  *   注意：对于其他可选参数（如auto_rotate，landmarks106和 attribute），如果没有需求，请不要开启，这样会减少系统计算时间
  *  @param landmarks106 非必须，值为 1 时，计算 106 个关键点。默认值为 0，不计算
  *  @param attributes   非必须，值为 1 时，提取人脸属性。默认值为 0，不提取
- *  @param emotions     非必须，值为 1 时，检测人脸表情。默认值为 0，不检测
  *  @param auto_rotate  非必须，值为1时，对图片进行自动旋转。默认值为0时，不旋转
  *  @param user_data    非必须，用户自定义信息
  *
@@ -175,7 +172,6 @@
 - (STImage *)face_detection_url:(NSString *) strImageUrl
                    landmarks106:(BOOL)landmarks106
                      attributes:(BOOL)attributes
-                       emotions:(BOOL)emotions
                     auto_rotate:(BOOL)auto_rotate
                       user_data:(NSString *)user_data;
 
@@ -248,18 +244,6 @@
  *  @return YES成功，NO 失败
  */
 - (BOOL)face_training_faceids:(NSMutableArray *)faceids personids:(NSMutableArray *)personids facesetids:(NSMutableArray *)facesetids groupids:(NSMutableArray *)groupids;
-
-
-#warning 待处理
-/**
- *  一堆人脸根据其之间的相似度进行分类，同一个人的人脸为一类( Beta 阶段),请不要在正式产品中使用
- *
- *  请求参数 face_ids、faceset_id 两者中必须选择其中的一个。如果同时提供， 系统只根据 faceset_id 进行分类。
- *  注意：一次请求包含的人脸数量不应超过 1200 个
- *  @return 返回分类结果
- - (instancetype)face_grouping_faceids:(NSArray *)faceids facesetid:(NSString *)facesetid;
- 
- */
 
 
 // =======================人的管理===============================

@@ -115,7 +115,6 @@
             stImage = [mySTApi face_detection_image:imageFace
                                        landmarks106:YES
                                          attributes:NO
-                                           emotions:NO
                                         auto_rotate:YES
                                           user_data:nil] ;
         }
