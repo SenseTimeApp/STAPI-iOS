@@ -1,4 +1,4 @@
-# stapi-sdk-ios
+# STAPI-iOS
 
 SenseTime Cloud API SDK for iOS 
 
@@ -23,3 +23,6 @@ STAPI_Demo：
 * v1.6  （2016.01.05）
 * v1.8  （2016.01.07）
 
+# Home 
+  官网： http://www.sensetime.com/cn
+  SDK： https://github.com/SenseTimeApp/STAPI-iOS
