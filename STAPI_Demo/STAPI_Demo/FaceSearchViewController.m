@@ -14,10 +14,10 @@
 #import "STCommon.h"
 #import "ImageFace.h"
 
-//#import "MyAPIKey.h"
-#error define my API key as following :
-#define MyApiID 		@"***********************"
-#define MyApiSecret 	@"***********************"
+#import "MyAPIKey.h"
+//#error define my API key as following :
+//#define MyApiID 		@"***********************"
+//#define MyApiSecret 	@"***********************"
 
 @interface FaceSearchViewController ()
 {

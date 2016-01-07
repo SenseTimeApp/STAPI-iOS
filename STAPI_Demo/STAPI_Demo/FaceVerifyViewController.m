@@ -11,10 +11,10 @@
 #import "STAPI.h"
 #import "STImage.h"
 
-//#import "MyAPIKey.h"       
-#error define my API key as following :
-#define MyApiID 		@"***********************"
-#define MyApiSecret 	@"***********************"
+#import "MyAPIKey.h"       
+//#error define my API key as following :
+//#define MyApiID 		@"***********************"
+//#define MyApiSecret 	@"***********************"
 
 @interface FaceVerifyViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *imageView1;

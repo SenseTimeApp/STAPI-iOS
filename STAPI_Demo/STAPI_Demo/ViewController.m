@@ -10,6 +10,8 @@
 #import "FaceDetectionViewController.h"
 #import "FaceVerifyViewController.h"
 #import "FaceSearchViewController.h"
+#import "GroupViewController.h"
+#import "FaceTrainingViewController.h"
 
 @interface ViewController ()
 
@@ -25,7 +27,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.title = @"STAPI_Demo" ;
     
-    self.arraySTFunctions = @[@"Face Detection",@"Face Verify",@"Face Search"];
+    self.arraySTFunctions = @[@"Face Detection",@"Face Verify",@"Face Search", @"Face Identify", @"Face Training"];
 
 }
 
@@ -52,18 +54,33 @@
     
     switch (indexPath.row) {
             
-        case 0:{
-            FaceDetectionViewController *faceDetectionVC = [[FaceDetectionViewController alloc]init];
-            [self.navigationController pushViewController:faceDetectionVC animated:YES];
-        }
-            break;
-        case 1: {
-            FaceVerifyViewController *faceDetectionVC = [[[NSBundle mainBundle]loadNibNamed:@"FaceVerifyViewController" owner:nil options:nil]firstObject];
-            [self.navigationController pushViewController:faceDetectionVC animated:YES];
-        }
+        case 0:
+        {
+            FaceDetectionViewController *vc = [[FaceDetectionViewController alloc]init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }break;
+            
+        case 1:
+        {
+            FaceVerifyViewController *vc = [[[NSBundle mainBundle]loadNibNamed:@"FaceVerifyViewController" owner:nil options:nil]firstObject];
+            [self.navigationController pushViewController:vc animated:YES];
+        }break;
+            
         case 2:
         {
             FaceSearchViewController *vc = [[FaceSearchViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }break;
+            
+        case 3:
+        {
+            GroupViewController *vc = [[GroupViewController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        }break;
+            
+        case 4:
+        {
+            FaceTrainingViewController *vc = [[FaceTrainingViewController alloc] init];
             [self.navigationController pushViewController:vc animated:YES];
         }break;
             

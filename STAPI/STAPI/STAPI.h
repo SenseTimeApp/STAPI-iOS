@@ -200,7 +200,7 @@
  *  @return 相似的人脸字典
  */
 
-- (NSDictionary *)face_search_faceid:(NSString *)faceid faceids:(NSMutableArray *)faceids topnum:(NSUInteger)num;
+- (NSDictionary *)face_search_faceid:(NSString *)faceid faceids:(NSString *)faceids topnum:(NSUInteger)num;
 
 /**
  *  在众多人脸中搜索出与目标人脸最为相似的一张或者多张人脸,有可能发生异步调用,异步调用的详细说明请参考PDF
@@ -264,13 +264,13 @@
 /**
  *  人创建成功后，调用本 API，可以为该人添加人脸信息。
  *
- *  @param personid ，要删除的人的 ID
+ *  @param personid ，要添加的人的 ID
  *
  *  @param faceids ，人脸的 ID 数组
  *
  *  @return 成功返回YES,失败返回NO
  */
-- (BOOL)person_add_face_personid:(NSString *)personid faceids:(NSMutableArray *)faceids;
+- (BOOL)person_add_face_personid:(NSString *)personid faceids:(NSString *)faceids;
 
 /**
  *  作用是移除人脸，使其不再属于这个人
@@ -281,13 +281,13 @@
  *
  *  @return 成功返回YES,失败返回NO
  */
-- (BOOL)person_remove_face_personid:(NSString *)personid faceids:(NSMutableArray *)faceids;
+- (BOOL)person_remove_face_personid:(NSString *)personid faceids:(NSString *)faceids;
 
 
 /**
  *  用于修改 person 的 user_data 和 name 信息
  *
- *  @param person   STPerson对象
+ *  @param personid   STPerson对象 的 ID
  *  @param name     人名
  *  @param userdata 用户自定义数据
  *   请求参数 name、user_data 两者中至少存在一个。
@@ -326,7 +326,7 @@
  *
  *  @return 成功返回YES,失败返回NO
  */
-- (BOOL)group_add_person_groupid:(NSString *)groupid personids:(NSMutableArray *)personids;
+- (BOOL)group_add_person_groupid:(NSString *)groupid personids:(NSString *)personids;
 
 
 /**
@@ -337,7 +337,7 @@
  *
  *  @return 成功返回YES,失败返回NO
  */
-- (BOOL)group_remove_person_groupid:(NSString *)groupid personids:(NSMutableArray *)personids;
+- (BOOL)group_remove_person_groupid:(NSString *)groupid personids:(NSString *)personids;
 
 /**
  *  用于修改 group 的 user_data 和 name 信息
@@ -382,7 +382,7 @@
  *
  *  @return 成功返回YES,失败返回NO
  */
-- (BOOL)faceset_add_face_facesetid:(NSString *)facesetid faceids:(NSMutableArray *)faceids;
+- (BOOL)faceset_add_face_facesetid:(NSString *)facesetid faceids:(NSString *)faceids;
 
 /**
  *  移除人脸集合所含有的人脸，使其不再属于该人脸集合
@@ -392,7 +392,7 @@
  *
  *  @return 成功返回YES,失败返回NO
  */
-- (BOOL)faceset_remove_facesetid:(NSString *)facesetid faceids:(NSMutableArray *)faceids;
+- (BOOL)faceset_remove_facesetid:(NSString *)facesetid faceids:(NSString *)faceids;
 
 /**
  *  用于修改人脸集合的 user_data 和 name 信息。

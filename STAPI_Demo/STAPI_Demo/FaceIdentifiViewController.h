@@ -1,5 +1,5 @@
 //
-//  FaceSearchViewController.h
+//  FaceIdentifiViewController.h
 //  STAPI_Demo
 //
 //  Created by SenseTime on 16/1/4.
@@ -8,8 +8,11 @@
 //  官网： http://www.sensetime.com/cn
 //  SDK： https://github.com/SenseTimeApp/STAPI-iOS
 
+
 #import <UIKit/UIKit.h>
 
-@interface FaceSearchViewController : UIViewController
+@interface FaceIdentifiViewController : UIViewController
+
+@property (nonatomic, strong) NSString *strGroupId;
 
 @end

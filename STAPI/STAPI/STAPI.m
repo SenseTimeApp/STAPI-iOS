@@ -119,14 +119,14 @@
 
 - (NSDictionary *)info_groupid:(NSString *)groupid{
     
-    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,INFO_PERSON];
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,INFO_GROUP];
     
     NSDictionary *parameters = @{ API_ID:self.apiid,API_SECRET:self.apisecret,@"group_id":groupid};
     return  [self sendGetRequestWithMethod:method parameters:parameters];
 }
 
 - (NSDictionary *)info_faceset_facesetid:(NSString *)facesetid{
-    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,INFO_PERSON];
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,INFO_FACESET];
     
     NSDictionary *parameters = @{ API_ID:self.apiid,API_SECRET:self.apisecret,@"faceset_id":facesetid};
     return  [self sendGetRequestWithMethod:method parameters:parameters];
@@ -219,6 +219,10 @@
 
 - (float)face_verification_faceid:(NSString *)faceid face2id:(NSString *)face2id
 {
+    if (!faceid || !face2id) {
+        NSLog(@"error : faceid or face2id is nil");
+        return -1;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_VERIFCATION];
     NSDictionary *parameters = @{@"face_id":faceid,@"face2_id":face2id
                                  };
@@ -231,7 +235,10 @@
     return -1;
 }
 - (float)face_verification_faceid:(NSString *)faceid personid:(NSString *)personid{
-    
+    if (!faceid || !personid) {
+        NSLog(@"error : faceid or personid is nil");
+        return -1;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_VERIFCATION];
     NSDictionary *parameters = @{@"face_id":faceid,@"person_id":personid
                                  };
@@ -243,7 +250,11 @@
     return -1;
 }
 
-- (NSDictionary *)face_search_faceid:(NSString *)faceid faceids:(NSMutableArray *)faceids topnum:(NSUInteger)num{
+- (NSDictionary *)face_search_faceid:(NSString *)faceid faceids:(NSString *)faceids topnum:(NSUInteger)num{
+    if (!faceid || !faceids) {
+        NSLog(@"error : faceid or faceids is nil");
+        return nil;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_SEARCH];
     
     NSDictionary *parameters = @{
@@ -259,6 +270,10 @@
 }
 
 - (NSDictionary *)face_search_faceid:(NSString *)faceid facesetid:(NSString *)facesetid topnum:(NSUInteger)num{
+    if (!faceid || !facesetid) {
+        NSLog(@"error : faceid or facesetid is nil");
+        return nil;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_SEARCH];
     
     NSDictionary *parameters = @{
@@ -274,6 +289,10 @@
 }
 
 - (NSDictionary *)face_identification_faceid:(NSString *)faceid groupid:(NSString *)groupid topnum:(NSUInteger)num{
+    if (!faceid || !groupid) {
+        NSLog(@"error : faceid or groupid is nil");
+        return nil;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_IDENTIFICATION];
     
     NSDictionary *parameters = @{
@@ -289,15 +308,109 @@
     
 }
 
-- (BOOL)face_training_faceids:(NSMutableArray *)faceids personids:(NSMutableArray *)personids facesetids:(NSMutableArray *)facesetids groupids:(NSMutableArray *)groupids{
-    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_IDENTIFICATION];
+- (BOOL)face_training_faceids:(NSString *)faceids personids:(NSString *)personids facesetids:(NSString *)facesetids groupids:(NSString *)groupids {
     
-    NSDictionary *parameters = @{
-                                 @"face_id":faceids,
-                                 @"person_id":personids,
-                                 @"faceset_id":facesetids,
-                                 @"group_id":groupids,
-                                 };
+    NSDictionary *parameters = [NSDictionary dictionary];
+    if (!faceids && !personids && !facesetids && !groupids) {
+        NSLog(@"error : faceids & personids & facesetids & groupids is nil");
+        return NO;
+    }
+    //one key
+    if ( faceids ) {
+        parameters = @{
+                       @"face_id":faceids,
+                       };
+    }
+    if ( personids ) {
+        parameters = @{
+                       @"person_id":personids,
+                       };
+    }
+    if ( facesetids ) {
+        parameters = @{
+                       @"faceset_id":facesetids,
+                       };
+    }
+    if ( groupids ) {
+        parameters = @{
+                       @"group_id":groupids,
+                       };
+    }
+    
+    //two key
+    if ( faceids && personids ) {
+        parameters = @{
+                       @"face_id":faceids,
+                       @"person_id":personids,
+                       };
+    }
+    if ( faceids && facesetids ) {
+        parameters = @{
+                       @"face_id":faceids,
+                       @"faceset_id":facesetids,
+                       };
+    }
+    if ( faceids && groupids ) {
+        parameters = @{
+                       @"face_id":faceids,
+                       @"group_id":groupids,
+                       };
+    }
+    
+    if ( personids && facesetids ) {
+        parameters = @{
+                       @"person_id":personids,
+                       @"faceset_id":facesetids,
+                       };
+    }
+    if ( personids && groupids ) {
+        parameters = @{
+                       @"person_id":personids,
+                       @"group_id":groupids,
+                       };
+    }
+    
+    if ( facesetids && groupids) {
+        parameters = @{
+                       @"faceset_id":facesetids,
+                       @"group_id":groupids,
+                       };
+    }
+    
+    //three key
+    if ( faceids && personids && groupids ) {
+        parameters = @{
+                       @"face_id":faceids,
+                       @"person_id":personids,
+                       @"group_id":groupids,
+                       };
+    }
+    if ( faceids && facesetids && groupids ) {
+        parameters = @{
+                       @"face_id":faceids,
+                       @"faceset_id":facesetids,
+                       @"group_id":groupids,
+                       };
+    }
+    if ( personids && facesetids && groupids ) {
+        parameters = @{
+                       @"person_id":personids,
+                       @"faceset_id":facesetids,
+                       @"group_id":groupids,
+                       };
+    }
+    
+    //four key
+    if ( faceids && personids && facesetids && groupids ) {
+        parameters = @{
+                       @"face_id":faceids,
+                       @"person_id":personids,
+                       @"faceset_id":facesetids,
+                       @"group_id":groupids,
+                       };
+    }
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_TRAINING];
+    
     NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
     if ([self.status isEqualToString:STATUS_OK]&&dict) {
         return YES;
@@ -309,6 +422,10 @@
 - (STPerson *)person_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata{
     if (userdata == nil) {
         userdata = @"_";
+    }
+    if (!name || !faceids) {
+        NSLog(@"error : name or faceids is nil");
+        return nil;
     }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,PERSON_CREATE];
     NSDictionary *parameters = @{
@@ -326,11 +443,16 @@
             NSLog(@"STPerson = %@", stPerson);
         }
         return stPerson;
+        
     }
     return nil;
 }
 
-- (BOOL)person_delete_personid:(NSString *)personid{
+- (BOOL)person_delete_personid:(NSString *)personid {
+    if (!personid) {
+        NSLog(@"error : personid is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,PERSON_DELETE];
     
     NSDictionary *parameters = @{@"person_id":personid,};
@@ -343,8 +465,12 @@
     
 }
 
-- (BOOL)person_add_face_personid:(NSString *)personid faceids:(NSMutableArray *)faceids
+- (BOOL)person_add_face_personid:(NSString *)personid faceids:(NSString *)faceids
 {
+    if (!personid || !faceids) {
+        NSLog(@"error : personid or faceids is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,PERSON_ADD_FACE];
     
     NSDictionary *parameters = @{@"person_id":personid,@"face_id":faceids};
@@ -356,8 +482,12 @@
     return NO;
 }
 
-- (BOOL)person_remove_face_personid:(NSString *)personid faceids:(NSMutableArray *)faceids
+- (BOOL)person_remove_face_personid:(NSString *)personid faceids:(NSString *)faceids
 {
+    if (!personid || !faceids) {
+        NSLog(@"error : personid or faceids is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,PERSON_REMOVE_FACE];
     
     NSDictionary *parameters = @{@"person_id":personid,@"face_id":faceids};
@@ -370,6 +500,10 @@
 }
 
 - (BOOL)person_change_personid:(NSString *)personid name:(NSString *)name userdata:(NSString *)userdata{
+    if (!personid ) {
+        NSLog(@"error : personid is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,PERSON_CHANGE];
     
     NSDictionary *parameters = @{@"person_id":personid,@"name":name,@"user_data":userdata};
@@ -388,7 +522,7 @@
     if (userdata == nil) {
         userdata = @"_";
     }
-    if (personids == nil) {
+    if (!personids) {
         return nil;
     }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,GROUP_CREATE];
@@ -413,6 +547,10 @@
 }
 
 - (BOOL)group_delete_groupid:(NSString *)groupid{
+    if (!groupid ) {
+        NSLog(@"error : groupid is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,GROUP_DELETE];
     
     NSDictionary *parameters = @{@"group_id":groupid};
@@ -424,7 +562,11 @@
     return NO;
 }
 
-- (BOOL)group_add_person_groupid:(NSString *)groupid personids:(NSMutableArray *)personids{
+- (BOOL)group_add_person_groupid:(NSString *)groupid personids:(NSString *)personids{
+    if (!groupid || !personids ) {
+        NSLog(@"error : groupid or personids is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,GROUP_ADD_PERSON];
     
     NSDictionary *parameters = @{@"group_id":groupid,@"person_id":personids};
@@ -436,8 +578,11 @@
     return NO;
 }
 
-- (BOOL)group_remove_person_groupid:(NSString *)groupid personids:(NSMutableArray *)personids{
-    
+- (BOOL)group_remove_person_groupid:(NSString *)groupid personids:(NSString *)personids{
+    if (!groupid || !personids ) {
+        NSLog(@"error : groupid or personids is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,GROUP_REMOVE_PERSON];
     
     NSDictionary *parameters = @{@"group_id":groupid,@"person_id":personids};
@@ -450,6 +595,10 @@
 }
 
 - (BOOL)group_change_person_groupid:(NSString *)groupid name:(NSString *)name userdata:(NSString *)userdata{
+    if (!groupid || !name ) {
+        NSLog(@"error : groupid or name is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,GROUP_CHANGE];
     
     NSDictionary *parameters = @{@"group_id":groupid,@"name":name,@"user_data":userdata};
@@ -466,6 +615,10 @@
 
 - (STFaceSet *)faceset_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata
 {
+    if (!faceids || !name ) {
+        NSLog(@"error : faceids or name is nil");
+        return nil;
+    }
     if (userdata == nil) {
         userdata = @"_";
     }
@@ -490,6 +643,10 @@
 }
 
 - (BOOL)faceset_delete_facesetid:(NSString *)facesetid{
+    if (!facesetid ) {
+        NSLog(@"error : facesetid is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACESET_DELETE];
     
     NSDictionary *parameters = @{@"faceset_id":facesetid};
@@ -501,7 +658,11 @@
     return NO;
 }
 
-- (BOOL)faceset_add_face_facesetid:(NSString *)facesetid faceids:(NSMutableArray *)faceids{
+- (BOOL)faceset_add_face_facesetid:(NSString *)facesetid faceids:(NSString *)faceids{
+    if (!facesetid || !faceids) {
+        NSLog(@"error : facesetid or faceids is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACESET_ADD_FACE];
     
     NSDictionary *parameters = @{@"faceset_id":facesetid,@"face_id":faceids};
@@ -513,7 +674,11 @@
     return NO;
 }
 
-- (BOOL)faceset_remove_facesetid:(NSString *)facesetid faceids:(NSMutableArray *)faceids{
+- (BOOL)faceset_remove_facesetid:(NSString *)facesetid faceids:(NSString *)faceids {
+    if (!facesetid || !faceids) {
+        NSLog(@"error : facesetid or faceids is nil");
+        return NO;
+    }
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACESET_REMOVE_FACE];
     
     NSDictionary *parameters = @{@"faceset_id":facesetid,@"face_id":faceids};
@@ -527,6 +692,11 @@
 
 
 - (BOOL)faceset_change_facesetid:(NSString *)facesetid name:(NSString *)name userdata:(NSString*)userdata{
+    if (!facesetid || !name) {
+        NSLog(@"error : facesetid or name is nil");
+        return NO;
+    }
+    
     NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACESET_CHANGE];
     
     NSDictionary *parameters = @{@"faceset_id":facesetid,@"name":name,@"user_data":userdata};

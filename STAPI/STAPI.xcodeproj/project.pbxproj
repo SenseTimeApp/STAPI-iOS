@@ -14,11 +14,11 @@
 		F76F69B11C3A72110091354C /* STGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = F76F69A81C3A72110091354C /* STGroup.m */; };
 		F76F69B21C3A72110091354C /* STImage.m in Sources */ = {isa = PBXBuildFile; fileRef = F76F69AA1C3A72110091354C /* STImage.m */; };
 		F76F69B31C3A72110091354C /* STPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = F76F69AC1C3A72110091354C /* STPerson.m */; };
-		F76F69BB1C3A73CD0091354C /* face1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F76F69B61C3A73CC0091354C /* face1.jpg */; };
-		F76F69BC1C3A73CD0091354C /* face2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F76F69B71C3A73CC0091354C /* face2.jpg */; };
-		F76F69BD1C3A73CD0091354C /* face3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F76F69B81C3A73CD0091354C /* face3.jpg */; };
 		F76F69BF1C3A73CD0091354C /* STAPITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F76F69BA1C3A73CD0091354C /* STAPITests.m */; };
 		FE616DB01C326B05007E8250 /* lib_STAPI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE616D9B1C326A91007E8250 /* lib_STAPI.a */; };
+		FE8F581F1C3EA01E00CD1C02 /* Jack.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FE8F581C1C3EA01E00CD1C02 /* Jack.jpg */; };
+		FE8F58201C3EA01E00CD1C02 /* Jay1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FE8F581D1C3EA01E00CD1C02 /* Jay1.jpg */; };
+		FE8F58211C3EA01E00CD1C02 /* Jay2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FE8F581E1C3EA01E00CD1C02 /* Jay2.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,13 +58,14 @@
 		F76F69AA1C3A72110091354C /* STImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = STImage.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F76F69AB1C3A72110091354C /* STPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = STPerson.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		F76F69AC1C3A72110091354C /* STPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = STPerson.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		F76F69B61C3A73CC0091354C /* face1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = face1.jpg; sourceTree = "<group>"; };
-		F76F69B71C3A73CC0091354C /* face2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = face2.jpg; sourceTree = "<group>"; };
-		F76F69B81C3A73CD0091354C /* face3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = face3.jpg; sourceTree = "<group>"; };
 		F76F69B91C3A73CD0091354C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F76F69BA1C3A73CD0091354C /* STAPITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = STAPITests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		FE616D9B1C326A91007E8250 /* lib_STAPI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = lib_STAPI.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE616DAB1C326B05007E8250 /* _STAPI.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = _STAPI.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE8F581A1C3E963200CD1C02 /* MyAPIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyAPIKey.h; path = ../../MyAPIKey.h; sourceTree = "<group>"; };
+		FE8F581C1C3EA01E00CD1C02 /* Jack.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Jack.jpg; sourceTree = "<group>"; };
+		FE8F581D1C3EA01E00CD1C02 /* Jay1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Jay1.jpg; sourceTree = "<group>"; };
+		FE8F581E1C3EA01E00CD1C02 /* Jay2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Jay2.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,26 +111,17 @@
 		F76F69B41C3A73CC0091354C /* STAPITests */ = {
 			isa = PBXGroup;
 			children = (
-				F76F69B51C3A73CC0091354C /* images */,
+				FE8F581B1C3EA01E00CD1C02 /* images */,
 				F76F69B91C3A73CD0091354C /* Info.plist */,
 				F76F69BA1C3A73CD0091354C /* STAPITests.m */,
 			);
 			path = STAPITests;
 			sourceTree = "<group>";
 		};
-		F76F69B51C3A73CC0091354C /* images */ = {
-			isa = PBXGroup;
-			children = (
-				F76F69B61C3A73CC0091354C /* face1.jpg */,
-				F76F69B71C3A73CC0091354C /* face2.jpg */,
-				F76F69B81C3A73CD0091354C /* face3.jpg */,
-			);
-			path = images;
-			sourceTree = "<group>";
-		};
 		FE616D921C326A91007E8250 = {
 			isa = PBXGroup;
 			children = (
+				FE8F581A1C3E963200CD1C02 /* MyAPIKey.h */,
 				F76F699E1C3A72110091354C /* STAPI */,
 				F76F69B41C3A73CC0091354C /* STAPITests */,
 				FE616D9C1C326A91007E8250 /* Products */,
@@ -143,6 +135,16 @@
 				FE616DAB1C326B05007E8250 /* _STAPI.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FE8F581B1C3EA01E00CD1C02 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				FE8F581C1C3EA01E00CD1C02 /* Jack.jpg */,
+				FE8F581D1C3EA01E00CD1C02 /* Jay1.jpg */,
+				FE8F581E1C3EA01E00CD1C02 /* Jay2.jpg */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,9 +225,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F76F69BD1C3A73CD0091354C /* face3.jpg in Resources */,
-				F76F69BB1C3A73CD0091354C /* face1.jpg in Resources */,
-				F76F69BC1C3A73CD0091354C /* face2.jpg in Resources */,
+				FE8F58201C3EA01E00CD1C02 /* Jay1.jpg in Resources */,
+				FE8F581F1C3EA01E00CD1C02 /* Jack.jpg in Resources */,
+				FE8F58211C3EA01E00CD1C02 /* Jay2.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
