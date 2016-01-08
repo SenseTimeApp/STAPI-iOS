@@ -191,7 +191,6 @@
  *
  *  @return 对比的分数 大于于 0.6 时判断为同一人
  */
-
 - (float)face_verification_faceid:(NSString *)faceid personid:(NSString *)personid;
 
 
@@ -217,7 +216,6 @@
  *
  *  @return 相似的人脸字典，包括人脸 ID 以及置信度
  */
-
 - (NSDictionary *)face_search_faceid:(NSString *)faceid facesetid:(NSString *)facesetid topnum:(NSUInteger)num;
 
 
@@ -247,7 +245,12 @@
  *
  *  @return YES成功，NO 失败
  */
-- (BOOL)face_training_faceids:(NSMutableArray *)faceids personids:(NSMutableArray *)personids facesetids:(NSMutableArray *)facesetids groupids:(NSMutableArray *)groupids;
+- (BOOL)face_training_faceids:(NSString *)faceids;
+- (BOOL)face_training_personids:(NSString *)personids;
+- (BOOL)face_training_facesetids:(NSString *)facesetids;
+- (BOOL)face_training_groupids:(NSString *)groupids;
+
+- (BOOL)face_training_faceids:(NSString *)faceids personids:(NSString *)personids facesetids:(NSString *)facesetids groupids:(NSString *)groupids;
 
 
 
@@ -264,6 +267,7 @@
  *
  *  @return STPerson对象
  */
+- (STPerson *)person_create_name:(NSString *)name;
 - (STPerson *)person_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata;
 
 /**
@@ -326,6 +330,7 @@
  *
  *  @return STGroup 对象
  */
+- (STGroup *)group_create_groupname:(NSString *)name;
 - (STGroup *)group_create_groupname:(NSString *)name personids:(NSString *)personids userdata:(NSString *)userdata;
 
 /**
@@ -384,6 +389,7 @@
  *
  *  @return STFaceSet对象
  */
+- (STFaceSet *)faceset_create_name:(NSString *)name;
 - (STFaceSet *)faceset_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata;
 
 /**

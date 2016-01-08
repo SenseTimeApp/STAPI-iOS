@@ -310,7 +310,7 @@
     
 }
 - (void)test3_Face_verification_personid {
-    
+ 
     // not value
     float fValue = [self.stApi face_verification_faceid:nil personid:nil];
     XCTAssert( fValue == -1 ) ;
@@ -341,36 +341,52 @@
     XCTAssertTrue( bDelPerson );
 }
 
-
 #pragma mark - face/Person
 
 - (void)test4_Person_function {
     
-    //    NSLog(@"test4_Person_delete = %@",[self.stApi info_list_persons]);
-    //not value
+//    NSLog(@"test4_Person_delete = %@",[self.stApi info_list_persons]);
+    
+    //clean All exist Persons
+    NSDictionary *dictPersons = [self.stApi info_list_persons];
+    NSArray *arrPersons = dictPersons[@"persons"];
+    if (arrPersons.count > 0) {
+        for (int i = 0; i <arrPersons.count; i++) {
+            NSString *strPerson_id = arrPersons[i][@"person_id"];
+            [self.stApi person_delete_personid:strPerson_id];
+        }
+    }
+    sleep(1);
+
+    //not any value
     STPerson *stPersonTest = [self.stApi person_create_name:nil faceids:nil userdata:nil];
     XCTAssertNil(stPersonTest);
     
+    // not name
+    STPerson *stPersonNoName = [self.stApi person_create_name:nil faceids:self.strFaceID1 userdata:@"Jay"];
+    XCTAssertNil(stPersonNoName);
+
+    
     //1.create person
-    STPerson *stPerson = [self.stApi person_create_name:@"test4_Person_function" faceids:self.strFaceID1 userdata:nil];
+    STPerson *stPerson = [self.stApi person_create_name:@"test4_Person_function"];
     XCTAssertNotNil(stPerson);
     XCTAssertNotNil(stPerson.strPersonID);
-    XCTAssertTrue (1 == stPerson.iFaceCount);
+    XCTAssertTrue (0 == stPerson.iFaceCount);
     NSDictionary *dictInfoPersonid0 = [self.stApi info_personid:stPerson.strPersonID];
     XCTAssertTrue([dictInfoPersonid0[@"status"] isEqualToString:STATUS_OK] );
-    XCTAssert       (  [dictInfoPersonid0[@"face_ids"] count] == 1) ;
+    XCTAssert       (  [dictInfoPersonid0[@"face_ids"] count] == 0) ;
     XCTAssertTrue([dictInfoPersonid0[@"name"] isEqualToString:@"test4_Person_function"] );
     
     
     //2.1 add one face
-    BOOL bAddTest = [self.stApi person_add_face_personid:nil faceids:nil];
+    BOOL bAddTest = [self.stApi person_add_face_personid:stPerson.strPersonID faceids:nil];
     XCTAssertFalse (bAddTest);
     
-    BOOL bAdd = [self.stApi person_add_face_personid:stPerson.strPersonID faceids:self.strFaceID2];
+    BOOL bAdd = [self.stApi person_add_face_personid:stPerson.strPersonID faceids:self.strFaceID1];
     XCTAssertTrue (bAdd);
     NSDictionary *dictInfoPersonid1 = [self.stApi info_personid:stPerson.strPersonID];
     XCTAssertTrue([dictInfoPersonid1[@"status"] isEqualToString:STATUS_OK] );
-    XCTAssert       (  [dictInfoPersonid1[@"face_ids"] count] == 2) ;
+    XCTAssert       (  [dictInfoPersonid1[@"face_ids"] count] == 1) ;
     
     
     //2.2 add two face
@@ -394,6 +410,8 @@
     BOOL bChangeTest = [self.stApi person_change_personid:nil name:nil userdata:nil];
     XCTAssertFalse( bChangeTest );
     
+    sleep(1);
+    
     BOOL bChange = [self.stApi person_change_personid:stPerson.strPersonID name:@"Jay" userdata:@"test_Jay"];
     XCTAssertTrue( bChange );
     NSDictionary *dictInfoPersonid4 = [self.stApi info_personid:stPerson.strPersonID];
@@ -402,17 +420,29 @@
     XCTAssertTrue([dictInfoPersonid4[@"user_data"] isEqualToString:@"test_Jay"] );
     XCTAssert       (  [dictInfoPersonid4[@"face_ids"] count] == 2) ;
     
-    sleep(1);
     //5. delete person
     BOOL bDelPerson = [self.stApi person_delete_personid:stPerson.strPersonID];
     XCTAssertTrue( bDelPerson );
+    
 }
+
 
 #pragma mark - face/Group
 
 - (void)test5_Group_function {
-    //    NSLog(@"test5_Group_function = %@",[self.stApi info_list_groups]);
+    //clean All exist Persons
+    NSDictionary *dictPersons = [self.stApi info_list_persons];
+    NSArray *arrPersons = dictPersons[@"persons"];
+    if (arrPersons.count > 0) {
+        for (int i = 0; i <arrPersons.count; i++) {
+            NSString *strPerson_id = arrPersons[i][@"person_id"];
+            [self.stApi person_delete_personid:strPerson_id];
+        }
+    }
+    sleep(1);
     
+//    NSLog(@"test5_Group_function = %@",[self.stApi info_list_groups]);
+    //clean All exist Groups
     NSDictionary *dictGroups = [self.stApi info_list_groups];
     NSArray *arr = dictGroups[@"groups"];
     
@@ -423,38 +453,44 @@
         }
     }
     
-    //create person
-    STPerson *stPerson = [self.stApi person_create_name:@"test5_Group_function_Person" faceids:self.strFaceID1 userdata:nil];
-    XCTAssertNotNil(stPerson);
-    XCTAssertNotNil(stPerson.strPersonID);
-    XCTAssertTrue (1 == stPerson.iFaceCount);
-    NSDictionary *dictInfoPerson0 = [self.stApi info_personid:stPerson.strPersonID];
-    XCTAssertTrue([dictInfoPerson0[@"status"] isEqualToString:STATUS_OK] );
-    XCTAssertTrue([dictInfoPerson0[@"name"] isEqualToString:@"test5_Group_function_Person"] );
-    
     //1. create group(add strFaceID1)
-    STGroup *stGroup = [self.stApi group_create_groupname:@"test5_Group_function_Person_Group" personids:stPerson.strPersonID userdata:nil];
+    STGroup *stGroupTest = [self.stApi group_create_groupname:nil personids:nil userdata:nil];
+    XCTAssertNil(stGroupTest);
+
+    STGroup *stGroup = [self.stApi group_create_groupname:@"test5_Group_function_Person_Group"];
     XCTAssertNotNil(stGroup);
     XCTAssertNotNil(stGroup.strGroupID);
-    XCTAssertTrue (1 == stGroup.iPersonCount);
+    XCTAssertTrue (0 == stGroup.iPersonCount);
     NSDictionary *dictInfoGroup1 = [self.stApi info_groupid:stGroup.strGroupID];
     XCTAssertTrue([dictInfoGroup1[@"status"] isEqualToString:STATUS_OK] );
-    XCTAssert       (  [dictInfoGroup1[@"persons"] count] == 1) ;
+    XCTAssert       (  [dictInfoGroup1[@"persons"] count] == 0) ;
     XCTAssertTrue([dictInfoGroup1[@"name"] isEqualToString:@"test5_Group_function_Person_Group"] );
     
     sleep(1);
     
     //2. add person to group
+    //create person
+    STPerson *stPerson = [self.stApi person_create_name:@"test5_Group_function_Person" faceids:self.strFaceID1 userdata:nil];
+    XCTAssertNotNil(stPerson);
+    XCTAssertNotNil(stPerson.strPersonID);
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
+    XCTAssertTrue (1 == stPerson.iFaceCount);
+    NSDictionary *dictInfoPerson0 = [self.stApi info_personid:stPerson.strPersonID];
+    XCTAssertTrue([dictInfoPerson0[@"status"] isEqualToString:STATUS_OK] );
+    XCTAssertTrue([dictInfoPerson0[@"name"] isEqualToString:@"test5_Group_function_Person"] );
+    
     //create other person
     STPerson *stPerson2 = [self.stApi person_create_name:@"test5_Group_function_Person2_Group" faceids:self.strFaceID2 userdata:nil];
     XCTAssertNotNil(stPerson2);
     XCTAssertNotNil(stPerson2.strPersonID);
     XCTAssertTrue (1 == stPerson2.iFaceCount);
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     NSDictionary *dictInfoPerson1 = [self.stApi info_personid:stPerson2.strPersonID];
     XCTAssertTrue([dictInfoPerson1[@"status"] isEqualToString:STATUS_OK] );
     XCTAssertTrue([dictInfoPerson1[@"name"] isEqualToString:@"test5_Group_function_Person2_Group"] );
     
-    BOOL bAddPerson = [self.stApi group_add_person_groupid:stGroup.strGroupID personids:stPerson2.strPersonID];
+    NSString *strPersonids = [NSString stringWithFormat:@"%@,%@",stPerson.strPersonID,stPerson2.strPersonID];
+    BOOL bAddPerson = [self.stApi group_add_person_groupid:stGroup.strGroupID personids:strPersonids];
     XCTAssertTrue( bAddPerson );
     NSDictionary *dictInfoGroup2 = [self.stApi info_groupid:stGroup.strGroupID];
     XCTAssertTrue([dictInfoGroup2[@"status"] isEqualToString:STATUS_OK] );
@@ -465,6 +501,7 @@
     //3. remove person(stPerson2) from group
     BOOL bRemove = [self.stApi group_remove_person_groupid:stGroup.strGroupID personids:stPerson2.strPersonID];
     XCTAssertTrue( bRemove );
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     NSDictionary *dictInfoGroup3 = [self.stApi info_groupid:stGroup.strGroupID];
     XCTAssertTrue([dictInfoGroup3[@"status"] isEqualToString:STATUS_OK] );
     XCTAssert       (  [dictInfoGroup3[@"persons"] count] == 1) ;
@@ -482,6 +519,7 @@
     
     //5. delete group
     // delete person
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     BOOL bDelPerson = [self.stApi person_delete_personid:stPerson.strPersonID];
     XCTAssertTrue( bDelPerson );
     BOOL bDelPerson2 = [self.stApi person_delete_personid:stPerson2.strPersonID];
@@ -495,9 +533,8 @@
 #pragma mark -   face/FaceSet
 
 - (void)test6_FaceSet_function {
-    //    sleep(2);
     //clean All exist faceSet
-    //    NSLog(@"test3_FaceSet_function = %@",[self.stApi info_list_facesets]);
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     NSDictionary *dictFacesets = [self.stApi info_list_facesets];
     NSArray *arr = dictFacesets[@"facesets"];
     
@@ -507,21 +544,26 @@
             [self.stApi faceset_delete_facesetid:strFaceset_id];
         }
     }
-    
+    sleep(1);
+    STFaceSet *stFaceSetTest = [self.stApi faceset_create_name:nil faceids:nil userdata:nil];
+    XCTAssertNil(stFaceSetTest);
+
     //1. create faceSet (strFaceID1)
-    STFaceSet *stFaceSet = [self.stApi faceset_create_name:@"test6_FaceSet_function" faceids:self.strFaceID1 userdata:nil];
+    STFaceSet *stFaceSet = [self.stApi faceset_create_name:@"test6_FaceSet_function"];
     XCTAssertNotNil(stFaceSet);
     XCTAssertNotNil(stFaceSet.strFaceSetID);
-    XCTAssertTrue (1 == stFaceSet.iFaceCount);
+    XCTAssertTrue (0 == stFaceSet.iFaceCount);
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     NSDictionary *dictInfoFaceSet0 = [self.stApi info_faceset_facesetid:stFaceSet.strFaceSetID];
     XCTAssertTrue([dictInfoFaceSet0[@"status"] isEqualToString:STATUS_OK] );
-    XCTAssert       (  [dictInfoFaceSet0[@"face_ids"] count] == 1) ;
+    XCTAssert       (  [dictInfoFaceSet0[@"face_ids"] count] == 0) ;
     XCTAssertTrue([dictInfoFaceSet0[@"name"] isEqualToString:@"test6_FaceSet_function"] );
     
-    
+    NSString *strFaceids = [NSString stringWithFormat:@"%@,%@",self.strFaceID1,self.strFaceID2];
     //2. add faceids(strFaceID2) to faceSet
-    BOOL bAddFaceids = [self.stApi faceset_add_face_facesetid:stFaceSet.strFaceSetID faceids:self.strFaceID2];
+    BOOL bAddFaceids = [self.stApi faceset_add_face_facesetid:stFaceSet.strFaceSetID faceids:strFaceids];
     XCTAssertTrue( bAddFaceids );
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     NSDictionary *dictInfoFaceSet1 = [self.stApi info_faceset_facesetid:stFaceSet.strFaceSetID];
     XCTAssertTrue([dictInfoFaceSet1[@"status"] isEqualToString:STATUS_OK] );
     XCTAssert       (  [dictInfoFaceSet1[@"face_ids"] count] == 2) ;
@@ -539,6 +581,7 @@
     //4. change faceSet info
     BOOL bChange = [self.stApi faceset_change_facesetid:stFaceSet.strFaceSetID name:@"Jay" userdata:@"test_Jay"];
     XCTAssertTrue( bChange );
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     NSDictionary *dictInfoFaceSet3 = [self.stApi info_faceset_facesetid:stFaceSet.strFaceSetID];
     XCTAssertTrue([dictInfoFaceSet3[@"status"] isEqualToString:STATUS_OK] );
     XCTAssertTrue([dictInfoFaceSet3[@"name"] isEqualToString:@"Jay"] );
@@ -548,14 +591,11 @@
     //5. delete faceSet
     BOOL bDelFaceSet = [self.stApi faceset_delete_facesetid:stFaceSet.strFaceSetID];
     XCTAssertTrue( bDelFaceSet );
-    
 }
-
 
 #pragma mark -   face/search
 //      /face/search	在众多人脸中搜索出与目标人脸最为相似的一张或者多张人脸
 - (void)test6_Facesetids_search {
-    sleep(1);
     //clean All exist faceSet
     NSDictionary *dictFaceset = [self.stApi info_list_facesets];
     NSArray *arr = dictFaceset[@"facesets"];
@@ -566,13 +606,14 @@
             [self.stApi faceset_delete_facesetid:strFaceset_id];
         }
     }
-    
-    
+    sleep(1);
+
     NSString *strFaceids = [NSString stringWithFormat:@"%@,%@",self.strFaceID2,self.strFaceID3];
     //create FaceSet
     STFaceSet *stFaceSet = [self.stApi faceset_create_name:@"test6_Facesetids_search" faceids:strFaceids userdata:nil];
     XCTAssertNotNil(stFaceSet);
     XCTAssertTrue(stFaceSet.iFaceCount == 2);
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     NSDictionary *dictInfoFaceSet = [self.stApi info_faceset_facesetid:stFaceSet.strFaceSetID];
     XCTAssertTrue([dictInfoFaceSet[@"status"] isEqualToString:STATUS_OK] );
     XCTAssertTrue([dictInfoFaceSet[@"name"] isEqualToString:@"test6_Facesetids_search"] );
@@ -580,21 +621,19 @@
     // search
     NSDictionary *dict = [self.stApi face_search_faceid:self.strFaceID1 facesetid:stFaceSet.strFaceSetID topnum:1];
     XCTAssertNotNil(dict);
-    //    NSLog(@"search dict = %@",dict);
-    
+ 
     //delete Faceset
     BOOL bDelFaceSet = [self.stApi faceset_delete_facesetid:stFaceSet.strFaceSetID];
-    
     XCTAssertTrue(bDelFaceSet);
-    
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
+ 
 }
 
 - (void)test6_Faceids_search {
     //clean All exist faceSet
     NSDictionary *dictFaceset = [self.stApi info_list_facesets];
     NSArray *arr = dictFaceset[@"facesets"];
-    
-    if (arr.count > 0) {
+        if (arr.count > 0) {
         for (int i = 0; i <arr.count; i++) {
             NSString *strFaceset_id = arr[i][@"faceset_id"];
             [self.stApi faceset_delete_facesetid:strFaceset_id];
@@ -606,16 +645,23 @@
     // search
     NSDictionary *dict = [self.stApi face_search_faceid:self.strFaceID1 faceids:strFaceids topnum:1];
     XCTAssertNotNil(dict);
-    //    NSLog(@"test3_Faceids_search dict = %@",dict);
-    
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
 }
-
-
+ 
 #pragma mark - face/identification
 //    /face/identification	将一个目标人脸与某个组中的所有人进行对比，找出几个与该人脸最相似的人
 - (void)test7_Idenfitication {
+    //clean All exist Persons
+    NSDictionary *dictPersons = [self.stApi info_list_persons];
+    NSArray *arrPersons = dictPersons[@"persons"];
+    if (arrPersons.count > 0) {
+        for (int i = 0; i <arrPersons.count; i++) {
+            NSString *strPerson_id = arrPersons[i][@"person_id"];
+            [self.stApi person_delete_personid:strPerson_id];
+        }
+    }
     
-    //clean All info_list_group
+    //clean All info_list_groups
     NSDictionary *dictGroups = [self.stApi info_list_groups];
     NSArray *arr = dictGroups[@"groups"];
     if (arr.count > 0) {
@@ -627,20 +673,20 @@
     
     NSString *strFaceids = [NSString stringWithFormat:@"%@,%@",self.strFaceID1,self.strFaceID2];
     
-    //    sleep(1);
+    sleep(1);
     
     //create Person
     STPerson *stPerson = [self.stApi person_create_name:@"test7_Idenfitication_Person" faceids:strFaceids userdata:nil];
     XCTAssertNotNil(stPerson);
     XCTAssertNotNil(stPerson.strPersonID);
     XCTAssertTrue (2 == stPerson.iFaceCount);
+    XCTAssert( [self.stApi.status isEqualToString:STATUS_OK]) ;
     NSDictionary *dictInfoPersonid0 = [self.stApi info_personid:stPerson.strPersonID];
     XCTAssertTrue([dictInfoPersonid0[@"status"] isEqualToString:STATUS_OK] );
     XCTAssert       (  [dictInfoPersonid0[@"face_ids"] count] == 2) ;
     
     // create group
     STGroup *stGroup = [self.stApi group_create_groupname:@"test7_Idenfitication_Group" personids:stPerson.strPersonID userdata:nil];
-    //    NSLog(@"  %@",self.stApi.status);
     XCTAssertNotNil(stGroup);
     XCTAssert   ( stGroup.iPersonCount == 1);
     
@@ -648,16 +694,17 @@
     //similar
     NSDictionary *dictIndenfity1 = [self.stApi face_identification_faceid:self.strFaceID1 groupid:stGroup.strGroupID topnum:1];
     XCTAssertNotNil(dictIndenfity1);
-    //    NSLog(@"Indenfity dict = %@",dictIndenfity1);
-    XCTAssert ([dictIndenfity1[@"candidates"] count] > 0);
-    
+    XCTAssertNotNil(dictIndenfity1[@"group_id"]);
+    XCTAssertTrue([dictIndenfity1[@"status"] isEqualToString:STATUS_OK] );
+    XCTAssert ([dictIndenfity1[@"candidates"] count] == 1);
+    XCTAssert ([dictIndenfity1[@"candidates"][0][@"confidence"] integerValue]== 1);
+
     //un similar
     NSDictionary *dictIndenfity2 = [self.stApi face_identification_faceid:self.strFaceID3 groupid:stGroup.strGroupID topnum:1];
     XCTAssertNotNil(dictIndenfity2);
-    //    NSLog(@"Indenfity dict = %@",dictIndenfity2);
+    XCTAssertNotNil(dictIndenfity2[@"group_id"]);
+    XCTAssertTrue([dictIndenfity2[@"status"] isEqualToString:STATUS_OK] );
     XCTAssert ([dictIndenfity2[@"candidates"] count] == 0);
-    
-    //    XCTAssert(dictIndenfity[@"confidence"]
     
     
     //delete person
@@ -667,33 +714,39 @@
     BOOL bDelGroup = [self.stApi group_delete_groupid:stGroup.strGroupID];
     XCTAssertTrue( bDelGroup);
     
-    
 }
 
 #pragma makr - /face/training
 //    /face/training	可以对人脸、人、人脸集合、组进行训练，提取其中的人脸信息
 - (void)test8_Training {
-    
-    //clean All info_list_group
+    //clean All exist Persons
+    NSDictionary *dictPersons = [self.stApi info_list_persons];
+    NSArray *arrPersons = dictPersons[@"persons"];
+    if (arrPersons.count > 0) {
+        for (int i = 0; i <arrPersons.count; i++) {
+            NSString *strPerson_id = arrPersons[i][@"person_id"];
+            [self.stApi person_delete_personid:strPerson_id];
+        }
+    }
+
+    //clean All exist Groups
     NSDictionary *dictGroups = [self.stApi info_list_groups];
-    NSArray *arr = dictGroups[@"groups"];
-    
-    if (arr.count > 0) {
-        for (int i = 0; i <arr.count; i++) {
-            NSString *strGroup_id = arr[i][@"group_id"];
+    NSArray *arrGroups = dictGroups[@"groups"];
+    if (arrGroups.count > 0) {
+        for (int i = 0; i <arrGroups.count; i++) {
+            NSString *strGroup_id = arrGroups[i][@"group_id"];
             [self.stApi group_delete_groupid:strGroup_id];
         }
         
     }
     
-    sleep(1);
-    
+    //clean All exist Facesets
     NSDictionary *dictFaceset = [self.stApi info_list_facesets];
-    NSArray *arrSet = dictFaceset[@"facesets"];
+    NSArray *arrFaceset = dictFaceset[@"facesets"];
     
-    if (arr.count > 0) {
-        for (int i = 0; i <arrSet.count; i++) {
-            NSString *strFaceset_id = arrSet[i][@"faceset_id"];
+    if (arrFaceset.count > 0) {
+        for (int i = 0; i <arrFaceset.count; i++) {
+            NSString *strFaceset_id = arrFaceset[i][@"faceset_id"];
             [self.stApi faceset_delete_facesetid:strFaceset_id];
         }
     }
@@ -730,18 +783,22 @@
     BOOL bTrainNoValue = [self.stApi face_training_faceids:nil personids:nil facesetids:nil groupids:nil];
     XCTAssertFalse(bTrainNoValue);
     
-    BOOL bTrain1 = [self.stApi face_training_faceids:nil personids:stPerson.strPersonID facesetids:stFaceSet.strFaceSetID groupids:stGroup.strGroupID];
+    BOOL bTrain1 = [self.stApi face_training_faceids:self.strFaceID1];
     XCTAssertTrue(bTrain1);
     
-    BOOL bTrain2 = [self.stApi face_training_faceids:nil personids:nil facesetids:stFaceSet.strFaceSetID groupids:stGroup.strGroupID];
+    BOOL bTrain2 = [self.stApi face_training_personids:stPerson.strPersonID];
     XCTAssertTrue(bTrain2);
     
-    BOOL bTrain3 = [self.stApi face_training_faceids:nil personids:nil facesetids:nil groupids:stGroup.strGroupID];
+    BOOL bTrain3 = [self.stApi face_training_facesetids:stFaceSet.strFaceSetID];
     XCTAssertTrue(bTrain3);
     
-    BOOL bTrain4 = [self.stApi face_training_faceids:self.strFaceID1 personids:stPerson.strPersonID facesetids:stFaceSet.strFaceSetID groupids:stGroup.strGroupID];
+    BOOL bTrain4 = [self.stApi face_training_groupids:stGroup.strGroupID];
     XCTAssertTrue(bTrain4);
     
+    sleep(1);
+    BOOL bTrain5 = [self.stApi face_training_faceids:self.strFaceID1 personids:stPerson.strPersonID facesetids:stFaceSet.strFaceSetID groupids:stGroup.strGroupID];
+    XCTAssertTrue(bTrain5);
+
     //delete faceSet
     BOOL bDelFaceSet = [self.stApi faceset_delete_facesetid:stFaceSet.strFaceSetID];
     XCTAssertTrue( bDelFaceSet );

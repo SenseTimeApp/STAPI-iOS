@@ -345,11 +345,68 @@
     
 }
 
+- (BOOL)face_training_faceids:(NSString *)faceids {
+    if ( !faceids ) {
+        NSLog(@"face training error : faceids is nil");
+        return NO;
+    }
+    NSDictionary *parameters = @{@"face_id":faceids};
+
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_TRAINING];
+    NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
+    if ([self.status isEqualToString:STATUS_OK]&&dict) {
+        return YES;
+    }
+    return NO;
+
+}
+- (BOOL)face_training_personids:(NSString *)personids {
+    if ( !personids ) {
+        NSLog(@"face training error : personids is nil");
+        return NO;
+    }
+    NSDictionary *parameters = @{@"person_id":personids};
+    
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_TRAINING];
+    NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
+    if ([self.status isEqualToString:STATUS_OK]&&dict) {
+        return YES;
+    }
+    return NO;
+}
+- (BOOL)face_training_facesetids:(NSString *)facesetids {
+    if ( !facesetids ) {
+        NSLog(@"face training error : facesetids is nil");
+        return NO;
+    }
+    NSDictionary *parameters = @{@"faceset_id":facesetids};
+    
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_TRAINING];
+    NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
+    if ([self.status isEqualToString:STATUS_OK]&&dict) {
+        return YES;
+    }
+    return NO;
+}
+- (BOOL)face_training_groupids:(NSString *)groupids {
+    if ( !groupids ) {
+        NSLog(@"face training error : groupids is nil");
+        return NO;
+    }
+    NSDictionary *parameters = @{@"group_id":groupids};
+    
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACE_TRAINING];
+    NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
+    if ([self.status isEqualToString:STATUS_OK]&&dict) {
+        return YES;
+    }
+    return NO;
+}
 - (BOOL)face_training_faceids:(NSString *)faceids personids:(NSString *)personids facesetids:(NSString *)facesetids groupids:(NSString *)groupids {
     
     NSDictionary *parameters = [NSDictionary dictionary];
     if (!faceids && !personids && !facesetids && !groupids) {
-        NSLog(@"error : faceids & personids & facesetids & groupids is nil");
+        NSLog(@"face training error : faceids & personids & facesetids & groupids is nil");
         return NO;
     }
     //one key
@@ -463,6 +520,25 @@
 }
 
 #pragma mark 人的管理
+- (STPerson *)person_create_name:(NSString *)name {
+    if ( !name ) {
+        NSLog(@"person create error : name is nil");
+        return nil;
+    }
+    NSDictionary *parameters = @{@"name":name};
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,PERSON_CREATE];
+    NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
+    if ([self.status isEqualToString:STATUS_OK]&&dict) {
+        
+        STPerson *stPerson = [[STPerson alloc]initWithDict:dict];
+        if ( self.bDebug ){
+            NSLog(@"STPerson = %@", stPerson);
+        }
+        return stPerson;
+        
+    }
+    return nil;
+}
 - (STPerson *)person_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata {
     if ( !name ) {
         NSLog(@"person create error : name is nil");
@@ -603,6 +679,27 @@
 }
 
 #pragma mark 组的管理
+- (STGroup *)group_create_groupname:(NSString *)name {
+    if ( !name ) {
+        NSLog(@"group create error : name is nil");
+        return nil;
+    }
+    
+    NSDictionary *parameters = @{@"name":name};
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,GROUP_CREATE];
+    NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
+    
+    if ([self.status isEqualToString:STATUS_OK]&&dict) {
+        
+        STGroup *stGroup = [[STGroup alloc]initWithDict:dict];
+        if ( self.bDebug ){
+            NSLog(@"STGroup = %@", stGroup);
+        }
+        return stGroup;
+        
+    }
+    return nil;
+}
 
 - (STGroup *)group_create_groupname:(NSString *)name personids:(NSString *)personids userdata:(NSString *)userdata {
     if ( !name ) {
@@ -742,7 +839,25 @@
 }
 
 #pragma mark 人脸集合的管理
-
+- (STFaceSet *)faceset_create_name:(NSString *)name {
+    if ( !name ) {
+        NSLog(@"faceset create error : name is nil");
+        return nil;
+    }
+    
+    NSDictionary *parameters = @{@"name":name};
+    NSString *method = [NSString stringWithFormat:@"%@%@",BASE_URL,FACESET_CREATE];
+    NSDictionary *dict =  [self sendPostRequestWithMethod:method parameters:parameters];
+    
+    if ([self.status isEqualToString:STATUS_OK]&&dict) {
+        STFaceSet *stFaceSet = [[STFaceSet alloc]initWithDict:dict];
+        if ( self.bDebug ){
+            NSLog(@"STFaceSet = %@", stFaceSet);
+        }
+        return stFaceSet;
+    }
+    return nil;
+}
 - (STFaceSet *)faceset_create_name:(NSString *)name faceids:(NSString *)faceids userdata:(NSString *)userdata {
     if ( !name ) {
         NSLog(@"faceset create error : name is nil");
