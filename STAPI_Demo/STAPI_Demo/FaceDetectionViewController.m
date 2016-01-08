@@ -127,9 +127,7 @@
                       mySTApi.httpStatusCode,
                       [mySTApi.error description]);
                 
-                
-                NSString *strMessage = [NSString stringWithFormat:@"%@\n%@", mySTApi.status, mySTApi.dictionary] ;
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:strMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[mySTApi.error description] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
                 [alert show] ;
                 
             }

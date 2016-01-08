@@ -568,6 +568,7 @@
     XCTAssertTrue([dictInfoFaceSet1[@"status"] isEqualToString:STATUS_OK] );
     XCTAssert       (  [dictInfoFaceSet1[@"face_ids"] count] == 2) ;
     
+    sleep(1);
     
     //3. remove face(strFaceID2) in FaceSet
     BOOL bRemoveFace = [self.stApi faceset_remove_facesetid:stFaceSet.strFaceSetID faceids:self.strFaceID2];
@@ -575,8 +576,6 @@
     NSDictionary *dictInfoFaceSet2 = [self.stApi info_faceset_facesetid:stFaceSet.strFaceSetID];
     XCTAssertTrue([dictInfoFaceSet2[@"status"] isEqualToString:STATUS_OK] );
     XCTAssert       (  [dictInfoFaceSet2[@"face_ids"] count] == 1) ;
-    
-    sleep(1);
     
     //4. change faceSet info
     BOOL bChange = [self.stApi faceset_change_facesetid:stFaceSet.strFaceSetID name:@"Jay" userdata:@"test_Jay"];

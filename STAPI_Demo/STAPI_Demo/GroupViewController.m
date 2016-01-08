@@ -176,14 +176,8 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 - (void)onAddPerson
 {
-    if (_imageviewForAdding.hidden)
-    {
-        _imageviewForAdding.hidden = NO;
-    }
-    else
-    {
-        _imageviewForAdding.hidden = YES;
-    }
+    _imageviewForAdding.hidden = NO;
+
 }
 
 - (void)onCancel
@@ -224,7 +218,16 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
               self.lfAPI.status,
               self.lfAPI.httpStatusCode,
               [self.lfAPI.error description]);
-        
+        if (self.lfAPI.httpStatusCode == 0)
+        {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"温馨提示"
+                                                           message:@"请连接网络"
+                                                          delegate:self
+                                                 cancelButtonTitle:@"确定"
+                                                 otherButtonTitles:nil, nil];
+            [alert show];
+        }
+
         [_indicator stopAnimating];
         return;
     }
@@ -310,6 +313,16 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
                     
                     [_nameTextView resignFirstResponder];
                     _imageviewForAdding.hidden = YES;
+                    [_indicator stopAnimating];
+                }
+                else
+                {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"温馨提示"
+                                                                   message:@"检测人脸失败，请重试"
+                                                                  delegate:self
+                                                         cancelButtonTitle:@"确定"
+                                                         otherButtonTitles:nil, nil];
+                    [alert show];
                     [_indicator stopAnimating];
                 }
             }
