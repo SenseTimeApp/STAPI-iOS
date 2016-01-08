@@ -13,4 +13,6 @@
 
 @interface FaceTrainingViewController : UIViewController
 
+@property (nonatomic, copy) NSString *strTitle;
+
 @end

@@ -57,30 +57,35 @@
         case 0:
         {
             FaceDetectionViewController *vc = [[FaceDetectionViewController alloc]init];
+            vc.strTitle = self.arraySTFunctions[indexPath.row];
             [self.navigationController pushViewController:vc animated:YES];
         }break;
             
         case 1:
         {
             FaceVerifyViewController *vc = [[[NSBundle mainBundle]loadNibNamed:@"FaceVerifyViewController" owner:nil options:nil]firstObject];
+            vc.strTitle = self.arraySTFunctions[indexPath.row];
             [self.navigationController pushViewController:vc animated:YES];
         }break;
             
         case 2:
         {
             FaceSearchViewController *vc = [[FaceSearchViewController alloc] init];
+            vc.strTitle = self.arraySTFunctions[indexPath.row];
             [self.navigationController pushViewController:vc animated:YES];
         }break;
             
         case 3:
         {
             GroupViewController *vc = [[GroupViewController alloc] init];
+            vc.strTitle = self.arraySTFunctions[indexPath.row];
             [self.navigationController pushViewController:vc animated:YES];
         }break;
             
         case 4:
         {
             FaceTrainingViewController *vc = [[FaceTrainingViewController alloc] init];
+            vc.strTitle = self.arraySTFunctions[indexPath.row];
             [self.navigationController pushViewController:vc animated:YES];
         }break;
             

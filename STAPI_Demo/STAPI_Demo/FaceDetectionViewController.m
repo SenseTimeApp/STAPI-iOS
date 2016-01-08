@@ -41,6 +41,8 @@
 {
     [super viewDidLoad];
     
+    self.title = self.strTitle;
+    
     self.arrFaces = [[NSMutableArray alloc] init];
     self.faceView = [[UIImageView alloc] init];
     self.faceView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);

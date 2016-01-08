@@ -43,6 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = self.strTitle;
     self.view.backgroundColor = [UIColor whiteColor];
     
     _btnPhoto = [UIButton buttonWithType:UIButtonTypeCustom];

@@ -45,6 +45,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = self.strTitle;
+    
     self.view.backgroundColor = [UIColor whiteColor];
     
     _arrFaces = [[NSMutableArray alloc] init];

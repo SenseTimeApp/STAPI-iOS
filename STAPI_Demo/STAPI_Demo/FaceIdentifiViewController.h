@@ -15,4 +15,6 @@
 
 @property (nonatomic, strong) NSString *strGroupId;
 
+@property (nonatomic, copy) NSString *strTitle;
+
 @end

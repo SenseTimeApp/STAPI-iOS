@@ -43,6 +43,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.title = self.strTitle;
+    
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.lfAPI = [[STAPI alloc] init ] ;

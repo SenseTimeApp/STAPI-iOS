@@ -11,4 +11,6 @@
 
 @interface FaceVerifyViewController : UIViewController
 
+@property (nonatomic, copy) NSString *strTitle;
+
 @end

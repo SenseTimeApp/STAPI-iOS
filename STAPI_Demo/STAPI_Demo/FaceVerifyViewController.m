@@ -31,6 +31,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = self.strTitle;
+
 }
 - (IBAction)onVerify:(id)sender {
     [self.indicator startAnimating] ;
