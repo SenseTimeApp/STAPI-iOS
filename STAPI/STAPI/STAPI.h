@@ -120,6 +120,8 @@
 - (NSDictionary *)info_faceset_facesetid:(NSString *)facesetid;
 
 
+#pragma mark - face detection
+
 // =======================人脸检测与分析===============================
 /**
  *  提供图片，进行人脸检测以及人脸分析
@@ -168,6 +170,8 @@
                       user_data:(NSString *)user_data;
 
 
+#pragma mark - face verification
+
 /**
  *  一对一人脸对比的功能
  *
@@ -190,6 +194,9 @@
 
 - (float)face_verification_faceid:(NSString *)faceid personid:(NSString *)personid;
 
+
+#pragma mark - face search
+
 /**
  *  在众多人脸中搜索出与目标人脸最为相似的一张或者多张人脸,有可能发生异步调用,异步调用的详细说明请参考PDF
  *
@@ -199,7 +206,6 @@
  *
  *  @return 相似的人脸字典
  */
-
 - (NSDictionary *)face_search_faceid:(NSString *)faceid faceids:(NSString *)faceids topnum:(NSUInteger)num;
 
 /**
@@ -214,6 +220,9 @@
 
 - (NSDictionary *)face_search_faceid:(NSString *)faceid facesetid:(NSString *)facesetid topnum:(NSUInteger)num;
 
+
+#pragma mark - face identification
+
 /**
  *  将一个目标人脸与某个组中的所有人进行对比,有可能发生异步调用,异步调用的详细说明请参考PDF
  *
@@ -224,6 +233,9 @@
  *  @return 当搜索出的人与目标人脸的置信度大于 0.6 时 candidates 中才会有结果返回。
  */
 - (NSDictionary *)face_identification_faceid:(NSString *)faceid groupid:(NSString *)groupid topnum:(NSUInteger)num;
+
+
+#pragma mark - face training
 
 /**
  *  对人脸、人、人脸集合、组进行训练,有可能发生异步调用,异步调用的详细说明请参考PDF
@@ -237,6 +249,9 @@
  */
 - (BOOL)face_training_faceids:(NSMutableArray *)faceids personids:(NSMutableArray *)personids facesetids:(NSMutableArray *)facesetids groupids:(NSMutableArray *)groupids;
 
+
+
+#pragma mark - 人的管理
 
 // =======================人的管理===============================
 
@@ -296,14 +311,18 @@
  */
 - (BOOL)person_change_personid:(NSString *)personid name:(NSString *)name userdata:(NSString *)userdata;
 
+
+
+#pragma mark - 组的管理
+
 // =======================组的管理===============================
 
 /**
  *  用于创建一个组。创建组的同时可以向该组中添加人。
  *
  *  @param name     组名
- *  @param personids 非必须，STPerson 数组，多个数据时用逗号分隔
- *  @param userdata 非必须用户自定义信息
+ *  @param personids 非必须, STPerson 数组，多个数据时用逗号分隔
+ *  @param userdata 非必须, 用户自定义信息
  *
  *  @return STGroup 对象
  */
@@ -351,6 +370,8 @@
  */
 - (BOOL)group_change_person_groupid:(NSString *)groupid name:(NSString *)name userdata:(NSString *)userdata;
 
+
+#pragma mark - 人脸集合的管理
 
 // =======================人脸集合的管理===============================
 
