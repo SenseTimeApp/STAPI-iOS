@@ -152,7 +152,6 @@
 				3AA8B5D01C40BCD40044F161 /* FaceSearch */,
 				3AA8B5CD1C40BCD40044F161 /* FaceIdentify */,
 				3AA8B5D31C40BCD40044F161 /* FaceTraining */,
-				3AA8B5DA1C40BCD40044F161 /* Group */,
 				3AA8B5DF1C40BCD40044F161 /* Model */,
 			);
 			path = Class;
@@ -170,6 +169,7 @@
 		3AA8B5CD1C40BCD40044F161 /* FaceIdentify */ = {
 			isa = PBXGroup;
 			children = (
+				3AA8B5DA1C40BCD40044F161 /* Group */,
 				3AA8B5CE1C40BCD40044F161 /* FaceIdentifiViewController.h */,
 				3AA8B5CF1C40BCD40044F161 /* FaceIdentifiViewController.m */,
 			);
@@ -212,7 +212,8 @@
 				3AA8B5DD1C40BCD40044F161 /* GroupViewController.h */,
 				3AA8B5DE1C40BCD40044F161 /* GroupViewController.m */,
 			);
-			path = Group;
+			name = Group;
+			path = ../Group;
 			sourceTree = "<group>";
 		};
 		3AA8B5DF1C40BCD40044F161 /* Model */ = {

@@ -24,6 +24,7 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
     BOOL bIsSelectImage;
     UIButton *_btnPhoto;
+    UIButton *_btnStart;
     UIImage *_photoImage;
     UITableView *_tableView;
     UITextField *_nameTextView;
@@ -87,16 +88,16 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
     _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
     [self.view addSubview:_indicator];
     
-    UIButton *btnStart = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnStart.frame = CGRectMake(self.view.frame.size.width/2-50, self.view.frame.size.height-100, 100, 80);
-    [btnStart addTarget:self action:@selector(onStart) forControlEvents:UIControlEventTouchUpInside];
-    btnStart.backgroundColor = [UIColor lightGrayColor];
-    btnStart.layer.borderWidth = 1;
-    btnStart.contentMode = UIViewContentModeScaleAspectFit;
-    [btnStart setTitle:@"开   始" forState:UIControlStateNormal];
-    [btnStart setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    btnStart.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    [self.view addSubview:btnStart];
+    _btnStart = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnStart.frame = CGRectMake(self.view.frame.size.width/2-50, self.view.frame.size.height-100, 100, 80);
+    [_btnStart addTarget:self action:@selector(onStart) forControlEvents:UIControlEventTouchUpInside];
+    _btnStart.backgroundColor = [UIColor lightGrayColor];
+    _btnStart.layer.borderWidth = 1;
+    _btnStart.contentMode = UIViewContentModeScaleAspectFit;
+    [_btnStart setTitle:@"开   始" forState:UIControlStateNormal];
+    [_btnStart setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _btnStart.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    [self.view addSubview:_btnStart];
 }
 
 - (void)initAddingView
@@ -514,6 +515,30 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
                 }
             });
         } );
+    }
+}
+
+#pragma mark -
+#pragma mark Orientation
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+    if ( UIDeviceOrientationIsPortrait( deviceOrientation ) || UIDeviceOrientationIsLandscape( deviceOrientation ) )
+    {
+        _tableView.frame = CGRectMake(0,0,size.width,size.height);
+        _indicator.frame = CGRectMake(size.width/2-25, size.height/2-25, 50, 50);
+        _btnStart.frame = CGRectMake(size.width/2-50, size.height-100, 100, 80);
+
+        _imageviewForAdding.frame = CGRectMake(size.width/2-200, size.height/2-200, 400, 400);
+        
     }
 }
 

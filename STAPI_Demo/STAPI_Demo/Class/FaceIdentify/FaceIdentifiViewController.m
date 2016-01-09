@@ -213,8 +213,8 @@
     UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
     if ( UIDeviceOrientationIsPortrait( deviceOrientation ) || UIDeviceOrientationIsLandscape( deviceOrientation ) )
     {
-        _btnPhoto.frame = CGRectMake(self.view.frame.size.width/2-200, self.view.frame.size.height/2-200, 400, 400);
-        _indicator.frame = CGRectMake(self.view.frame.size.width/2-25, self.view.frame.size.height/2-25, 50, 50);
+        _btnPhoto.frame = CGRectMake(size.width/2-200, size.height/2-200, 400, 400);
+        _indicator.frame = CGRectMake(size.width/2-25, size.height/2-25, 50, 50);
         
     }
 }
