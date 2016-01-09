@@ -20,11 +20,11 @@
 @interface FaceTrainingViewController ()
 {
     UIImageView *_imageFaceSet;
+    UIButton *_btnStart;
     UIActivityIndicatorView *_indicator;
 }
 
 @property (nonatomic, strong) STAPI *lfAPI;
-
 @end
 
 @implementation FaceTrainingViewController
@@ -49,7 +49,7 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.lfAPI = [[STAPI alloc] init ] ;
-    self.lfAPI.bDebug = YES ;
+    self.lfAPI.bDebug = NO ;
     [self.lfAPI start_apiid:MyApiID apisecret:MyApiSecret] ;
     
     _imageFaceSet = [[UIImageView alloc] init];
@@ -59,19 +59,19 @@
     _imageFaceSet.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_imageFaceSet];
     
-    UIButton *btnStart = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnStart = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnStart.frame = CGRectMake(self.view.frame.size.width/2-40, self.view.frame.size.height-90, 80, 80);
-    btnStart.alpha = 0.5;
-    btnStart.backgroundColor = [UIColor blueColor];
-    btnStart.layer.cornerRadius = 40;
-    btnStart.layer.borderWidth = 8;
-    btnStart.titleLabel.font = [UIFont systemFontOfSize:18];
-    btnStart.layer.borderColor = [UIColor whiteColor].CGColor;
-    [btnStart setTitle:@"开始" forState:UIControlStateNormal];
-    [btnStart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [btnStart addTarget:self action:@selector(onStart) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btnStart];
+    _btnStart = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnStart = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnStart.frame = CGRectMake(self.view.frame.size.width/2-40, self.view.frame.size.height-90, 80, 80);
+    _btnStart.alpha = 0.5;
+    _btnStart.backgroundColor = [UIColor blueColor];
+    _btnStart.layer.cornerRadius = 40;
+    _btnStart.layer.borderWidth = 8;
+    _btnStart.titleLabel.font = [UIFont systemFontOfSize:18];
+    _btnStart.layer.borderColor = [UIColor whiteColor].CGColor;
+    [_btnStart setTitle:@"开始" forState:UIControlStateNormal];
+    [_btnStart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_btnStart addTarget:self action:@selector(onStart) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_btnStart];
     
     _indicator = [[UIActivityIndicatorView alloc] init];
     _indicator.backgroundColor = [UIColor clearColor];
@@ -128,6 +128,17 @@
             }
         }
 
+        //clean All exist Persons
+        NSDictionary *dictPersons = [self.lfAPI info_list_persons];
+        NSArray *arrPersons = dictPersons[@"persons"];
+        if (arrPersons.count > 0) {
+            for (int i = 0; i <arrPersons.count; i++) {
+                NSString *strPerson_id = arrPersons[i][@"person_id"];
+                [self.lfAPI person_delete_personid:strPerson_id];
+            }
+        }
+        sleep(1);
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
             if (self.lfAPI.error)
             {
@@ -201,6 +212,8 @@
                         }
                     }
                     
+                    sleep(1);
+                    
                     //training
                     if (strIds && strSetIds && strPersonIds && strGroupIds)
                     {
@@ -267,6 +280,28 @@
             }
         });
     } );
+}
+
+#pragma mark -
+#pragma mark Orientation
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+    if ( UIDeviceOrientationIsPortrait( deviceOrientation ) || UIDeviceOrientationIsLandscape( deviceOrientation ) )
+    {
+        _imageFaceSet.frame = CGRectMake(0, 0, size.width,size.height);
+        _btnStart.frame = CGRectMake(size.width/2-40, size.height-90, 80, 80);
+        _indicator.frame = CGRectMake(size.width/2-25, size.height/2-25, 50, 50);
+        
+    }
 }
 
 @end

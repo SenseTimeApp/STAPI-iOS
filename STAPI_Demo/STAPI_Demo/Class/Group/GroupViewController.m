@@ -267,6 +267,18 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
                         }
                     }
                     
+                    //clean All exist Persons
+                    NSDictionary *dictPersons = [self.lfAPI info_list_persons];
+                    NSArray *arrPersons = dictPersons[@"persons"];
+                    if (arrPersons.count > 0) {
+                        for (int i = 0; i <arrPersons.count; i++) {
+                            NSString *strPerson_id = arrPersons[i][@"person_id"];
+                            [self.lfAPI person_delete_personid:strPerson_id];
+                        }
+                    }
+                    
+                    sleep(1);
+                    
                     //if find face, create person
                     STPerson *person = [self.lfAPI person_create_name:_nameTextView.text faceids:strIds userdata:@"mark"];
                     
@@ -371,7 +383,6 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
         [_indicator stopAnimating];
         return;
     }
-    
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
     dispatch_async(queue, ^{
         
@@ -387,7 +398,8 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
             }
         }
         
-        self.group = [self.lfAPI group_create_groupname:@"mark_ios" personids:@"" userdata:@"mark"];
+        sleep(1);
+        self.group = [self.lfAPI group_create_groupname:@"mark_ios" personids:nil userdata:@"mark"];
 
         dispatch_sync(dispatch_get_main_queue(), ^{
             if (self.lfAPI.error)

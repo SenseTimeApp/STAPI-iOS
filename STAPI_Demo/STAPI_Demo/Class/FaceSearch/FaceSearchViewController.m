@@ -27,6 +27,7 @@
     UIImageView *_imageFace;
     UIActivityIndicatorView *_indicator;
 }
+@property (nonatomic, strong) UIButton *btnStart;
 @end
 
 @implementation FaceSearchViewController
@@ -77,6 +78,7 @@
     [btnStart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btnStart addTarget:self action:@selector(onSearch) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnStart];
+    self.btnStart = btnStart;
     
     _indicator = [[UIActivityIndicatorView alloc] init];
 //    _indicator.backgroundColor = [UIColor clearColor];
@@ -143,7 +145,17 @@
                             _strIds = [_strIds stringByAppendingString:[NSString stringWithFormat:@",%@",face.strFaceID]];
                         }
                     }
+                    //clean All exist faceSet
+                    NSDictionary *dictFacesets = [myApi info_list_facesets];
+                    NSArray *arr = dictFacesets[@"facesets"];
                     
+                    if (arr.count > 0) {
+                        for (int i = 0; i <arr.count; i++) {
+                            NSString *strFaceset_id = arr[i][@"faceset_id"];
+                            [myApi faceset_delete_facesetid:strFaceset_id];
+                        }
+                    }
+
                     STFaceSet *faceSet = [myApi faceset_create_name:@"123" faceids:_strIds userdata:@"test"];
                     //[myApi faceset_delete_facesetid:faceSet.strFaceSetID];
                     
@@ -214,6 +226,28 @@
             }
         });
     } );
+}
+
+#pragma mark -
+#pragma mark Orientation
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+    if ( UIDeviceOrientationIsPortrait( deviceOrientation ) || UIDeviceOrientationIsLandscape( deviceOrientation ) )
+    {
+        _imageFaceSet.frame = CGRectMake(0, 0, size.width, size.height);
+        self.btnStart.frame = CGRectMake(size.width/2-40, size.height-90, 80, 80);
+        _imageFace.frame = CGRectMake(size.width-120, size.height-120, 120, 120);
+
+    }
 }
 
 @end
