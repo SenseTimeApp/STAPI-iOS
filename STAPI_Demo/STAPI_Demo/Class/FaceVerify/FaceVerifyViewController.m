@@ -16,7 +16,9 @@
 //#define MyApiID 		@"***********************"
 //#define MyApiSecret 	@"***********************"
 
-@interface FaceVerifyViewController ()
+@interface FaceVerifyViewController () {
+    BOOL _bBusy;
+}
 @property (weak, nonatomic) IBOutlet UIImageView *imageView1;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView2;
 
@@ -33,8 +35,16 @@
     // Do any additional setup after loading the view.
     self.title = self.strTitle;
 
+    _bBusy = NO;
 }
 - (IBAction)onVerify:(id)sender {
+    if (_bBusy) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"正在检测！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
+        [alert show] ;
+        return;
+    }
+    _bBusy = YES;
+    
     [self.indicator startAnimating] ;
 
     STAPI *mySTApi = [[STAPI alloc] init ] ;
@@ -48,7 +58,7 @@
                               mySTApi.status,
                               mySTApi.httpStatusCode,
                               [mySTApi.error description] ];
-        
+        _bBusy = NO;
         [self.indicator stopAnimating];
         return;
         
@@ -67,6 +77,9 @@
                                       mySTApi.status,
                                       mySTApi.httpStatusCode,
                                       [mySTApi.error description] ];
+                _bBusy = NO;
+                [self.indicator stopAnimating] ;
+                
             }else{
                 float fScoreSame = [mySTApi face_verification_faceid:stImage1.arrFaces[0][@"face_id"] face2id:stImage2.arrFaces[0][@"face_id"]] ;
                 
@@ -81,6 +94,7 @@
                     
                 }
             }
+            _bBusy = NO;
             [self.indicator stopAnimating] ;
             
         });

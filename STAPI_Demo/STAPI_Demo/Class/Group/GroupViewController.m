@@ -163,6 +163,8 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
     if (![UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
     {
         sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }else {
+        
     }
 //    sourceType = UIImagePickerControllerSourceTypeCamera;
     //sourceType = UIImagePickerControllerSourceTypePhotoLibrary;

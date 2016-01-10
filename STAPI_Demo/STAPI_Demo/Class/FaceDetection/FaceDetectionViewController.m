@@ -17,7 +17,9 @@
 //#define MyApiID 		@"***********************"
 //#define MyApiSecret 	@"***********************"
 
-@interface FaceDetectionViewController ()
+@interface FaceDetectionViewController () {
+    BOOL _bBusy;
+}
 
 @property (strong, nonatomic) UIActivityIndicatorView *indicator;
 @property (strong, nonatomic) NSMutableArray *arrFaces;
@@ -42,8 +44,11 @@
     [super viewDidLoad];
     
     self.title = self.strTitle;
+    self.view.backgroundColor = [UIColor whiteColor];
     
+    _bBusy = NO;
     self.arrFaces = [[NSMutableArray alloc] init];
+    
     self.faceView = [[UIImageView alloc] init];
     self.faceView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     self.faceView.contentMode = UIViewContentModeScaleAspectFit;
@@ -51,7 +56,6 @@
     self.faceView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.faceView];
     
-    self.btnStart = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnStart = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnStart.frame = CGRectMake(self.view.frame.size.width/2-40, self.view.frame.size.height-90, 80, 80);
     self.btnStart.alpha = 0.5;
@@ -77,6 +81,13 @@
 
 - (void)onDetect
 {
+ 
+    if (_bBusy) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"正在检测！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
+        [alert show] ;
+        return;
+    }
+    _bBusy = YES;
     
     [self.indicator startAnimating] ;
     
@@ -97,6 +108,7 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:strMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
         [alert show] ;
 
+        _bBusy = NO;
         [self.indicator stopAnimating];
         return;
         
@@ -199,11 +211,12 @@
                         self.faceView.frame = CGRectMake(0, 0, self.faceView.frame.size.width, self.faceView.frame.size.height);
                         UIGraphicsEndImageContext();
                     }
+                    _bBusy = NO;
                 }
                 else {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"没有检测到脸！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
                     [alert show] ;
-                    
+                    _bBusy = NO;
                 }
             }
             
@@ -216,6 +229,7 @@
                 [self.btnStart setTitle:@"21点" forState:UIControlStateNormal];
             }
             
+            _bBusy = NO;
             [self.indicator stopAnimating] ;
         });
     } );
