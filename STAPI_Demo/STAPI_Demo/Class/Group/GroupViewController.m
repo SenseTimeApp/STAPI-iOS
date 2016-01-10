@@ -164,7 +164,7 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
     {
         sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
-    sourceType = UIImagePickerControllerSourceTypeCamera;
+//    sourceType = UIImagePickerControllerSourceTypeCamera;
     //sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     //sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     _photoPicker = [[UIImagePickerController alloc] init];

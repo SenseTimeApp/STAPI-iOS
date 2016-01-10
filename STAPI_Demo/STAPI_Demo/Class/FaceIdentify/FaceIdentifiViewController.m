@@ -124,16 +124,16 @@
 {
     [_indicator startAnimating];
     
-    STAPI *myLFApi = [[STAPI alloc] init ] ;
-    myLFApi.bDebug = YES ;
-    [myLFApi start_apiid:MyApiID apisecret:MyApiSecret] ;
+    STAPI *myApi = [[STAPI alloc] init ] ;
+    myApi.bDebug = YES ;
+    [myApi start_apiid:MyApiID apisecret:MyApiSecret] ;
     
-    if ( myLFApi.error )
+    if ( myApi.error )
     {
         NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-              myLFApi.status,
-              myLFApi.httpStatusCode,
-              [myLFApi.error description]);
+              myApi.status,
+              myApi.httpStatusCode,
+              [myApi.error description]);
         
         [_indicator stopAnimating];
         return;
@@ -142,26 +142,26 @@
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
     dispatch_async(queue, ^{
         
-        STImage *stImage = [myLFApi face_detection_image:_photoImage] ;
+        STImage *stImage = [myApi face_detection_image:_photoImage] ;
         
         dispatch_sync(dispatch_get_main_queue(), ^{
-            if (myLFApi.error)
+            if (myApi.error)
             {
                 NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-                      myLFApi.status,
-                      myLFApi.httpStatusCode,
-                      [myLFApi.error description]);
+                      myApi.status,
+                      myApi.httpStatusCode,
+                      [myApi.error description]);
             }
             else
             {
-                if ([myLFApi.status isEqualToString:STATUS_OK] &&
+                if ([myApi.status isEqualToString:STATUS_OK] &&
                     stImage.arrFaces.count > 0)
                 {
                     //the photoImage must be one face
                     ImageFace *face = [[ImageFace alloc] initWithDict:[stImage.arrFaces objectAtIndex:0] landmarksType:21];
                     
                     //start identify
-                    NSDictionary *dicResult = [myLFApi face_identification_faceid:face.strFaceID groupid:self.strGroupId topnum:1];
+                    NSDictionary *dicResult = [myApi face_identification_faceid:face.strFaceID groupid:self.strGroupId topnum:1];
                     
                     if (!dicResult)
                     {
