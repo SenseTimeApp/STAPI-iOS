@@ -33,7 +33,7 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
     UIImagePickerController *_photoPicker;
 }
 
-@property (nonatomic, strong) STAPI *lfAPI;
+@property (nonatomic, strong) STAPI *myAPI;
 @property (nonatomic, strong) STGroup *group;
 @property (nonatomic, strong) NSMutableArray *arrPersons;
 @property (nonatomic, strong) NSMutableArray *arrPersonNames;
@@ -63,9 +63,9 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
     self.arrPersons = [[NSMutableArray alloc] init];
     self.arrPersonNames = [[NSMutableArray alloc] init];
     
-    self.lfAPI = [[STAPI alloc] init ] ;
-    self.lfAPI.bDebug = YES ;
-    [self.lfAPI start_apiid:MyApiID apisecret:MyApiSecret] ;
+    self.myAPI = [[STAPI alloc] init ] ;
+    self.myAPI.bDebug = YES ;
+    [self.myAPI start_apiid:MyApiID apisecret:MyApiSecret] ;
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"新建" style:UIBarButtonItemStylePlain target:self action:@selector(onAddPerson)];
     rightItem.tintColor = [UIColor blueColor];
@@ -216,13 +216,13 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
     [_indicator startAnimating];
     
     //create person: 2steps, 1-get faceId, 2-create person
-    if ( self.lfAPI.error )
+    if ( self.myAPI.error )
     {
         NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-              self.lfAPI.status,
-              self.lfAPI.httpStatusCode,
-              [self.lfAPI.error description]);
-        if (self.lfAPI.httpStatusCode == 0)
+              self.myAPI.status,
+              self.myAPI.httpStatusCode,
+              [self.myAPI.error description]);
+        if (self.myAPI.httpStatusCode == 0)
         {
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"温馨提示"
                                                            message:@"请连接网络"
@@ -239,19 +239,19 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
     dispatch_async(queue, ^{
         
-        STImage *stImage = [self.lfAPI face_detection_image:_photoImage] ;
+        STImage *stImage = [self.myAPI face_detection_image:_photoImage] ;
         
         dispatch_sync(dispatch_get_main_queue(), ^{
-            if (self.lfAPI.error)
+            if (self.myAPI.error)
             {
                 NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-                      self.lfAPI.status,
-                      self.lfAPI.httpStatusCode,
-                      [self.lfAPI.error description]);
+                      self.myAPI.status,
+                      self.myAPI.httpStatusCode,
+                      [self.myAPI.error description]);
             }
             else
             {
-                if ([self.lfAPI.status isEqualToString:STATUS_OK] &&
+                if ([self.myAPI.status isEqualToString:STATUS_OK] &&
                     stImage.arrFaces.count > 0)
                 {
                     //the photoImage maybe contain one or more faces
@@ -271,19 +271,19 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
                     }
                     
                     //clean All exist Persons
-                    NSDictionary *dictPersons = [self.lfAPI info_list_persons];
+                    NSDictionary *dictPersons = [self.myAPI info_list_persons];
                     NSArray *arrPersons = dictPersons[@"persons"];
                     if (arrPersons.count > 0) {
                         for (int i = 0; i <arrPersons.count; i++) {
                             NSString *strPerson_id = arrPersons[i][@"person_id"];
-                            [self.lfAPI person_delete_personid:strPerson_id];
+                            [self.myAPI person_delete_personid:strPerson_id];
                         }
                     }
                     
                     sleep(1);
                     
                     //if find face, create person
-                    STPerson *person = [self.lfAPI person_create_name:_nameTextView.text faceids:strIds userdata:@"mark"];
+                    STPerson *person = [self.myAPI person_create_name:_nameTextView.text faceids:strIds userdata:@"mark"];
                     
                     //create person success
                     if (person && person.strPersonID && person.iFaceCount > 0)
@@ -291,11 +291,11 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
                         [_arrPersons addObject:person];
                         
                         //get person info
-                        NSDictionary *dicPersonInfo = [self.lfAPI info_personid:person.strPersonID];
+                        NSDictionary *dicPersonInfo = [self.myAPI info_personid:person.strPersonID];
                         [self.arrPersonNames addObject:[dicPersonInfo objectForKey:@"name"]];
                         
                         //send into group
-                        BOOL bAddPerson = [self.lfAPI group_add_person_groupid:self.group.strGroupID personids:person.strPersonID];
+                        BOOL bAddPerson = [self.myAPI group_add_person_groupid:self.group.strGroupID personids:person.strPersonID];
                         
                         if (!bAddPerson)
                         {
@@ -376,12 +376,12 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
     [_indicator startAnimating];
     
-    if ( self.lfAPI.error )
+    if ( self.myAPI.error )
     {
         NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-              self.lfAPI.status,
-              self.lfAPI.httpStatusCode,
-              [self.lfAPI.error description]);
+              self.myAPI.status,
+              self.myAPI.httpStatusCode,
+              [self.myAPI.error description]);
         
         [_indicator stopAnimating];
         return;
@@ -389,7 +389,7 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
     dispatch_async(queue, ^{
         
-        NSDictionary *dictGroups = [self.lfAPI info_list_groups];
+        NSDictionary *dictGroups = [self.myAPI info_list_groups];
         NSArray *arr = dictGroups[@"groups"];
         
         if (arr.count > 0)
@@ -397,25 +397,25 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
             for (int i = 0; i <arr.count; i++)
             {
                 NSString *strGroup_id = arr[i][@"group_id"];
-                [self.lfAPI group_delete_groupid:strGroup_id];
+                [self.myAPI group_delete_groupid:strGroup_id];
             }
         }
         
         sleep(1);
-        self.group = [self.lfAPI group_create_groupname:@"mark_ios" personids:nil userdata:@"mark"];
+        self.group = [self.myAPI group_create_groupname:@"mark_ios" personids:nil userdata:@"mark"];
 
         dispatch_sync(dispatch_get_main_queue(), ^{
-            if (self.lfAPI.error)
+            if (self.myAPI.error)
             {
                 NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-                      self.lfAPI.status,
-                      self.lfAPI.httpStatusCode,
-                      [self.lfAPI.error description]);
+                      self.myAPI.status,
+                      self.myAPI.httpStatusCode,
+                      [self.myAPI.error description]);
                 [_indicator stopAnimating];
             }
             else
             {
-                if ([self.lfAPI.status isEqualToString:STATUS_OK])
+                if ([self.myAPI.status isEqualToString:STATUS_OK])
                 {
                     if (self.group.strGroupID && self.group.strGroupName)
                     {
@@ -494,20 +494,20 @@ UIImagePickerControllerDelegate, UINavigationControllerDelegate>
         
         dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
         dispatch_async(queue, ^{
-            BOOL bDelete = [self.lfAPI person_delete_personid:person.strPersonID];
+            BOOL bDelete = [self.myAPI person_delete_personid:person.strPersonID];
             
             dispatch_sync(dispatch_get_main_queue(), ^{
-                if (self.lfAPI.error)
+                if (self.myAPI.error)
                 {
                     NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-                          self.lfAPI.status,
-                          self.lfAPI.httpStatusCode,
-                          [self.lfAPI.error description]);
+                          self.myAPI.status,
+                          self.myAPI.httpStatusCode,
+                          [self.myAPI.error description]);
                     [_indicator stopAnimating];
                 }
                 else
                 {
-                    if ([self.lfAPI.status isEqualToString:STATUS_OK] && bDelete)
+                    if ([self.myAPI.status isEqualToString:STATUS_OK] && bDelete)
                     {
                         [_arrPersons removeObjectAtIndex:indexPath.row];
                         [_arrPersonNames removeObjectAtIndex:indexPath.row];

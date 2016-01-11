@@ -19,12 +19,14 @@
 
 @interface FaceTrainingViewController ()
 {
+    BOOL _bBusy;
+
     UIImageView *_imageFaceSet;
     UIButton *_btnStart;
     UIActivityIndicatorView *_indicator;
 }
 
-@property (nonatomic, strong) STAPI *lfAPI;
+@property (nonatomic, strong) STAPI *myAPI;
 @end
 
 @implementation FaceTrainingViewController
@@ -45,12 +47,13 @@
     [super viewDidLoad];
     
     self.title = self.strTitle;
-    
+    _bBusy = NO;
+
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.lfAPI = [[STAPI alloc] init ] ;
-    self.lfAPI.bDebug = NO ;
-    [self.lfAPI start_apiid:MyApiID apisecret:MyApiSecret] ;
+    self.myAPI = [[STAPI alloc] init ] ;
+    self.myAPI.bDebug = NO ;
+    [self.myAPI start_apiid:MyApiID apisecret:MyApiSecret] ;
     
     _imageFaceSet = [[UIImageView alloc] init];
     _imageFaceSet.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
@@ -86,15 +89,22 @@
 
 - (void)onStart
 {
+    if (_bBusy) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"正在检测！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
+        [alert show] ;
+        return;
+    }
+    _bBusy = YES;
+    
     [_indicator startAnimating];
     
-    if ( self.lfAPI.error )
+    if ( self.myAPI.error )
     {
         NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-              self.lfAPI.status,
-              self.lfAPI.httpStatusCode,
-              [self.lfAPI.error description]);
-        
+              self.myAPI.status,
+              self.myAPI.httpStatusCode,
+              [self.myAPI.error description]);
+        _bBusy = NO;
         [_indicator stopAnimating];
         return;
     }
@@ -102,54 +112,58 @@
     dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
     dispatch_async(queue, ^{
         
-        STImage *stImage = [self.lfAPI face_detection_image:_imageFaceSet.image] ;
+        STImage *stImage = [self.myAPI face_detection_image:_imageFaceSet.image] ;
         
         //clean sets: if more than 5 sets creation will be failed
-        NSDictionary *dictSets = [self.lfAPI info_list_facesets];
+        NSDictionary *dictSets = [self.myAPI info_list_facesets];
         NSArray *arrSets = dictSets[@"facesets"];
         if (arrSets.count > 0)
         {
             for (int i = 0; i <arrSets.count; i++)
             {
                 NSString *strSet_id = arrSets[i][@"faceset_id"];
-                [self.lfAPI faceset_delete_facesetid:strSet_id];
+                [self.myAPI faceset_delete_facesetid:strSet_id];
             }
         }
-
+        
         //clean groups: if more than 3 groups creation will be failed
-        NSDictionary *dictGroups = [self.lfAPI info_list_groups];
+        NSDictionary *dictGroups = [self.myAPI info_list_groups];
         NSArray *arrGroups = dictGroups[@"groups"];
         if (arrGroups.count > 0)
         {
             for (int i = 0; i <arrGroups.count; i++)
             {
                 NSString *strGroup_id = arrGroups[i][@"group_id"];
-                [self.lfAPI group_delete_groupid:strGroup_id];
+                [self.myAPI group_delete_groupid:strGroup_id];
             }
         }
 
         //clean All exist Persons
-        NSDictionary *dictPersons = [self.lfAPI info_list_persons];
+        NSDictionary *dictPersons = [self.myAPI info_list_persons];
         NSArray *arrPersons = dictPersons[@"persons"];
         if (arrPersons.count > 0) {
             for (int i = 0; i <arrPersons.count; i++) {
                 NSString *strPerson_id = arrPersons[i][@"person_id"];
-                [self.lfAPI person_delete_personid:strPerson_id];
+                [self.myAPI person_delete_personid:strPerson_id];
             }
         }
         sleep(1);
         
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
-            if (self.lfAPI.error)
+            
+            NSLog(@"tag =         status(%@)",self.myAPI.status);
+
+            if (self.myAPI.error)
             {
                 NSLog(@"返回状态: %@\n HTTPStatusCode: %d\n 异常: %@",
-                      self.lfAPI.status,
-                      self.lfAPI.httpStatusCode,
-                      [self.lfAPI.error description]);
+                      self.myAPI.status,
+                      self.myAPI.httpStatusCode,
+                      [self.myAPI.error description]);
             }
             else
             {
-                if ([self.lfAPI.status isEqualToString:STATUS_OK] &&
+                if ([self.myAPI.status isEqualToString:STATUS_OK] &&
                     stImage.arrFaces.count > 0)
                 {
                     //all kind of ids will be send into training interface
@@ -168,9 +182,9 @@
                         {
                             strIds = [strIds stringByAppendingString:[NSString stringWithFormat:@",%@",face.strFaceID]];
                         }
-                        
+
                         //setIds
-                        STFaceSet *set = [self.lfAPI faceset_create_name:[NSString stringWithFormat:@"set%d",i] faceids:face.strFaceID userdata:@"set"];
+                        STFaceSet *set = [self.myAPI faceset_create_name:[NSString stringWithFormat:@"set%d",i] faceids:face.strFaceID userdata:@"set"];
                         if (set && set.strFaceSetID && set.iFaceCount >0)
                         {
                             if (!strSetIds)
@@ -182,9 +196,9 @@
                                 strSetIds = [strSetIds stringByAppendingString:[NSString stringWithFormat:@",%@",set.strFaceSetID]];
                             }
                         }
-                        
+
                         //personIds
-                        STPerson *person = [self.lfAPI person_create_name:[NSString stringWithFormat:@"person%d",i] faceids:face.strFaceID userdata:@"person"];
+                        STPerson *person = [self.myAPI person_create_name:[NSString stringWithFormat:@"person%d",i] faceids:face.strFaceID userdata:@"person"];
                         if (person && person.strPersonID && person.iFaceCount > 0)
                         {
                             if (!strPersonIds)
@@ -198,7 +212,7 @@
                         }
                         
                         //groupIds
-                        STGroup *group = [self.lfAPI group_create_groupname:[NSString stringWithFormat:@"group%d",i] personids:person.strPersonID userdata:@"group"];
+                        STGroup *group = [self.myAPI group_create_groupname:[NSString stringWithFormat:@"group%d",i] personids:person.strPersonID userdata:@"group"];
                         if (group && group.strGroupID && group.iPersonCount > 0)
                         {
                             if (!strGroupIds)
@@ -217,7 +231,7 @@
                     //training
                     if (strIds && strSetIds && strPersonIds && strGroupIds)
                     {
-                        BOOL bTraining = [self.lfAPI face_training_faceids:strIds personids:strPersonIds facesetids:strSetIds groupids:strGroupIds];
+                        BOOL bTraining = [self.myAPI face_training_faceids:strIds personids:strPersonIds facesetids:strSetIds groupids:strGroupIds];
                         
                         if (bTraining)
                         {
@@ -275,7 +289,20 @@
                         [alert show];
                     }
                     
+                    _bBusy = NO;
                     [_indicator stopAnimating];
+                }else {
+                    
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"error"
+                                                                   message:[self.myAPI.status debugDescription]
+                                                                  delegate:self
+                                                         cancelButtonTitle:@"确定"
+                                                         otherButtonTitles:nil, nil];
+                    [alert show];
+                    
+                    _bBusy = NO;
+                    [_indicator stopAnimating];
+
                 }
             }
         });

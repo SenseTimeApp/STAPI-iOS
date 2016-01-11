@@ -21,6 +21,8 @@
 
 @interface FaceSearchViewController ()
 {
+    BOOL _bBusy;
+
     NSString *_strIds;
     NSMutableArray *_arrFaces;
     UIImageView *_imageFaceSet;
@@ -46,8 +48,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = self.strTitle;
     
+    self.title = self.strTitle;
+    _bBusy = NO;
+
     self.view.backgroundColor = [UIColor whiteColor];
     
     _arrFaces = [[NSMutableArray alloc] init];
@@ -89,6 +93,13 @@
 
 -(void)onSearch
 {
+    if (_bBusy) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"正在检测!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
+        [alert show] ;
+        return;
+    }
+    _bBusy = YES;
+    
     [_indicator startAnimating];
     
     STAPI *myApi = [[STAPI alloc] init ] ;
@@ -102,6 +113,7 @@
               myApi.httpStatusCode,
               [myApi.error description]);
         
+        _bBusy = NO;
         [_indicator stopAnimating];
         return;
     }
@@ -164,6 +176,8 @@
                         NSString *strMessage = [NSString stringWithFormat:@"%@\n%@", myApi.status, myApi.dictionary] ;
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:strMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] ;
                         [alert show] ;
+
+                        _bBusy = NO;
                         [_indicator stopAnimating];
                         return;
                     }
@@ -221,6 +235,7 @@
                         }
                     }
                     
+                    _bBusy = NO;
                     [_indicator stopAnimating] ;
                 }
             }
@@ -244,6 +259,7 @@
     if ( UIDeviceOrientationIsPortrait( deviceOrientation ) || UIDeviceOrientationIsLandscape( deviceOrientation ) )
     {
         _imageFaceSet.frame = CGRectMake(0, 0, size.width, size.height);
+        _indicator.frame = CGRectMake(size.width/2-15, size.height/2-15, 50, 50);
         self.btnStart.frame = CGRectMake(size.width/2-40, size.height-90, 80, 80);
         _imageFace.frame = CGRectMake(size.width-120, size.height-120, 120, 120);
 
