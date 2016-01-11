@@ -103,6 +103,8 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    _lbName.hidden = YES;
+    
     UIImage *photoImage = [info objectForKey:UIImagePickerControllerOriginalImage];
     _photoImage = photoImage;
     [_btnPhoto setImage:photoImage forState:UIControlStateNormal];
@@ -178,16 +180,24 @@
                     else
                     {
                         NSMutableArray *arrCandidates = [dicResult objectForKey:@"candidates"];
-                        for (int i=0; i<arrCandidates.count; i++)
-                        {
-                            float confidence = [[[arrCandidates objectAtIndex:i] objectForKey:@"confidence"] floatValue];
-                            if (confidence > 0.6)
+                        
+                        if (!arrCandidates.count) {
+                            _lbName.text = @"mismatching";
+                            _lbName.textColor = [UIColor redColor];
+                            
+                        }else {
+                            for (int i=0; i<arrCandidates.count; i++)
                             {
-                                NSString *strName = [[arrCandidates objectAtIndex:i] objectForKey:@"name"];
-                                _lbName.text = strName;
-                                _lbName.textColor = [UIColor greenColor];
+                                float confidence = [[[arrCandidates objectAtIndex:i] objectForKey:@"confidence"] floatValue];
+                                if (confidence > 0.6)
+                                {
+                                    NSString *strName = [[arrCandidates objectAtIndex:i] objectForKey:@"name"];
+                                    _lbName.text = strName;
+                                    _lbName.textColor = [UIColor greenColor];
+                                }
                             }
                         }
+                        
                     }
                     
                     _lbName.hidden = NO;
